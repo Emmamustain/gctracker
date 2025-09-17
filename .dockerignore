@@ -1,0 +1,52 @@
+# Dependencies
+.pnpm-store
+
+# Build outputs
+dist
+.next
+build
+apps/**/dist
+packages/**/dist
+apps/**/.next
+.tsbuildinfo
+**/.tsbuildinfo
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Node dependencies - these will be installed inside the container
+node_modules
+apps/**/node_modules
+packages/**/node_modules
+
+# Version control
+.git
+.gitignore
+
+# Environment files
+.env
+.env.*
+!/.env.example
+
+# IDE files
+.idea
+.vscode
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db 
+
+# Docker and temp files
+Dockerfile*
+docker-compose.yml
+.dockerignore
+npm-debug.log*
+pnpm-debug.log*

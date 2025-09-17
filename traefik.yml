@@ -1,0 +1,22 @@
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: DEBUG
+
+entryPoints:
+  web:
+    address: ":80"
+  web-secured:
+    address: ":443"
+    http:
+      tls: {}
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: app-network
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true

@@ -1,0 +1,35 @@
+FROM node:20-alpine
+
+ENV PNPM_HOME=/root/.local/share/pnpm
+ENV NODE_ENV=production
+RUN corepack enable && corepack prepare pnpm@latest --activate
+    
+WORKDIR /app
+    
+# 1. Copy all package manifests and config files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY apps/backend/package.json ./apps/backend/
+COPY packages/shared/types/package.json ./packages/shared/types/
+COPY packages/shared/drizzle/package.json ./packages/shared/drizzle/
+COPY tsconfig.base.json ./
+
+# 2. Install ALL dependencies for the entire workspace
+RUN pnpm install --frozen-lockfile
+
+# 3. Copy the rest of the source code
+COPY packages/ ./packages/
+COPY apps/backend/ ./apps/backend/
+
+# 4. Build the shared packages FIRST.
+RUN pnpm --filter "@shared/*" build
+
+# 5. NOW, build the backend.
+RUN pnpm --filter backend build
+
+WORKDIR /app/apps/backend
+
+EXPOSE 4000
+# Use the absolute path to the entrypoint file
+# --- CRITICAL NEW FIX: Use NODE_PATH ---
+CMD ["sh", "-c", "export NODE_PATH=/app/apps/backend/dist && pnpm start:prod"]
+# --- END NEW FIX ---

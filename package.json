@@ -1,0 +1,24 @@
+{
+  "name": "next-nest-monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "docker-compose -f docker-compose.dev.yml up --build",
+    "prod": "docker-compose -f docker-compose.prod.yml up --build",
+    "prod:build": "docker-compose -f docker-compose.prod.yml build",
+    "build:shared": "pnpm --filter \"@shared/*\" build",
+    "build:all:watch": "concurrently --kill-others \"pnpm --filter @shared/drizzle dev\" \"pnpm --filter @shared/types dev\"",
+    "dev:local": "concurrently --kill-others --names \"shared-drizzle,shared-types,backend,frontend\" \"pnpm --filter @shared/drizzle dev\" \"pnpm --filter @shared/types dev\" \"pnpm --filter backend start:dev\" \"pnpm --filter frontend dev\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.5.2",
+  "devDependencies": {
+    "@types/node": "^24.0.1",
+    "concurrently": "^9.1.2",
+    "tsc-watch": "^7.1.1",
+    "typescript": "^5.8.3"
+  }
+}
