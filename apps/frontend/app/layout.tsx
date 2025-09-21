@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Syne } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header/Header";
+
 import { ThemeProvider } from "@/providers/theme-provider";
 import QueryProvider from "@/providers/query-provider";
+import Header from "@/components/Header/Header";
 
 const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken-grotesk",

@@ -171,6 +171,7 @@ endif
 	@echo ""
 	@echo "--- Package Management (run while containers are up) ---"
 	@echo "make add-frontend-dep <name> - Add a dependency to the frontend"
+	@echo "make pnpm-frontend <name> - run pnpm on the frontend"
 	@echo "make add-frontend-dev <name> - Add a dev dependency to the frontend"
 	@echo "make add-backend-dep <name>  - Add a dependency to the backend"
 	@echo "make add-backend-dev <name>  - Add a dev dependency to the backend"
@@ -205,6 +206,15 @@ add-frontend-dep:
 	fi
 	@echo "📦 Installing dependency '$(ARGS)' in frontend container..."
 	docker-compose -f docker-compose.dev.yml exec frontend pnpm add $(ARGS)
+	@echo "✅ Done."
+
+pnpm-frontend:
+	@if [ -z "$(ARGS)" ]; then \
+		echo "❌ Error: Missing package name. Usage: make pnpm-frontend <package-name>"; \
+		exit 1; \
+	fi
+	@echo "📦 Installing dependency '$(ARGS)' in frontend container..."
+	docker-compose -f docker-compose.dev.yml exec frontend pnpm $(ARGS)
 	@echo "✅ Done."
 
 add-frontend-dev:

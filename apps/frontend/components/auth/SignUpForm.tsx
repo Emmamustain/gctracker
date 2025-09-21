@@ -14,11 +14,11 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
 
   async function signup({
     email,
-    name,
+    username,
     password,
   }: {
     email: string;
-    name: string;
+    username: string;
     password: string;
   }) {
     try {
@@ -27,7 +27,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, name, password }),
+        body: JSON.stringify({ email, username, password }),
       });
 
       if (res.status === 201) {
@@ -46,7 +46,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
 
   const form = useForm({
     defaultValues: {
-      fullname: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -60,7 +60,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
 
       const result = await signup({
         email: value.email,
-        name: value.fullname,
+        username: value.username,
         password: value.password,
       });
 
@@ -75,7 +75,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
       onSubmit: z
         .object({
           email: z.string().email(),
-          fullname: z.string().min(2),
+          username: z.string().min(2),
           password: z.string().min(8),
           confirmPassword: z.string().min(8),
         })
@@ -95,7 +95,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               e.preventDefault();
               form.handleSubmit();
             }}
-            className="p-6 md:p-8 backdrop-blur-xl bg-[#FEDFB1]/20 border border-[#FEDFB1]/30 shadow-2xl rounded-l-lg"
+            className="rounded-l-lg border border-[#FEDFB1]/30 bg-[#FEDFB1]/20 p-6 shadow-2xl backdrop-blur-xl md:p-8"
           >
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
@@ -107,13 +107,13 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                 </p>
               </div>
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && <p className="text-sm text-red-500">{error}</p>}
 
-              {/* Full Name Field */}
+              {/* Username Field */}
               <form.Field
-                name="fullname"
+                name="username"
                 validators={{
-                  onChange: z.string().min(1, "Full Name is required"),
+                  onChange: z.string().min(1, "Username is required"),
                 }}
                 children={(field) => (
                   <div className="grid gap-2">
@@ -121,7 +121,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                       htmlFor={field.name}
                       className="text-sm font-medium text-white"
                     >
-                      Full Name
+                      Username
                     </label>
                     <input
                       id={field.name}
@@ -131,7 +131,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="John Doe"
-                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white backdrop-blur-sm placeholder:text-gray-300 focus:border-transparent focus:ring-2 focus:ring-white/50 focus:outline-none"
                     />
                     {field.state.meta.errors && (
                       <em className="text-sm text-red-400">
@@ -169,7 +169,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="m@example.com"
-                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white backdrop-blur-sm placeholder:text-gray-300 focus:border-transparent focus:ring-2 focus:ring-white/50 focus:outline-none"
                     />
                     {field.state.meta.errors && (
                       <em className="text-sm text-red-400">
@@ -205,7 +205,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white backdrop-blur-sm placeholder:text-gray-300 focus:border-transparent focus:ring-2 focus:ring-white/50 focus:outline-none"
                     />
                     {field.state.meta.errors && (
                       <em className="text-sm text-red-400">
@@ -239,7 +239,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent backdrop-blur-sm"
+                      className="flex h-10 w-full rounded-md border border-white/30 bg-white/10 px-3 py-2 text-sm text-white backdrop-blur-sm placeholder:text-gray-300 focus:border-transparent focus:ring-2 focus:ring-white/50 focus:outline-none"
                     />
                     {field.state.meta.errors && (
                       <em className="text-sm text-red-400">
@@ -259,7 +259,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                   <button
                     type="submit"
                     disabled={!canSubmit}
-                    className="w-full h-10 px-4 py-2 bg-white text-black font-medium rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50"
+                    className="h-10 w-full rounded-md bg-white px-4 py-2 font-medium text-black transition-colors hover:bg-gray-100 disabled:opacity-50"
                   >
                     {isSubmitting ? "Signing up..." : "Sign up"}
                   </button>
@@ -278,13 +278,13 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             </div>
           </form>
 
-          <div className="relative hidden md:block overflow-hidden bg-[#453027]">
+          <div className="relative hidden overflow-hidden bg-[#453027] md:block">
             <Image
               src="/zen_waves.png"
               width={256}
               height={256}
               alt="Cosmic background with black hole"
-              className="absolute inset-0 object-cover w-full"
+              className="absolute inset-0 w-full object-cover"
             />
           </div>
         </div>

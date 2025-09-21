@@ -27,4 +27,13 @@ export class CreateUserDto {
     message: 'Password must be between 8 and 100 characters',
   })
   password!: string;
+
+  @IsString({ message: 'displayName must be a string' })
+  @Length(3, 50, {
+    message: 'displayName must be between 3 and 50 characters',
+  })
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'displayName can only contain letters, numbers, and underscores',
+  })
+  displayName: string;
 }
