@@ -6,3 +6,5 @@ export type TGiftspace = Omit<
 >;
 export type TReqGiftspace = { giftspaceId: string };
 export type TReqGiftspacesByOwner = { owner: string };
+
+export type TCreateGiftspace = typeof schema.giftspaces.$inferInsert;

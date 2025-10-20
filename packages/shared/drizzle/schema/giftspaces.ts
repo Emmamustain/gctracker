@@ -8,7 +8,7 @@ export const giftspaces = pgTable("giftspaces", {
     .primaryKey()
     .default(sql`gen_random_uuid()`),
   password: varchar("password", { length: 255 }),
-  name: varchar("display_name", { length: 100 }),
+  name: varchar("display_name", { length: 100 }).notNull(),
   owner: uuid("owner")
     .notNull()
     .references(() => users.id),

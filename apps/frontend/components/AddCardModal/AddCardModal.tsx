@@ -3,23 +3,78 @@
 import React from "react";
 import { PlusCircle, CreditCard } from "lucide-react";
 import { useState } from "react";
-import useCardsStore from "@/hook/useCardsStore";
-import { brands } from "@/data/brands";
 import BarCodeScanner from "@/components/BarCodeScanner/BarCodeScanner";
+import { TBrand, TCreateGiftcard, TGiftspace } from "@shared/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUserStore } from "@/stores/user.store";
+
 function AddCardModal() {
   const [name, setName] = useState("");
   const [pin, setPin] = useState("");
   const [balance, setBalance] = useState("");
   const [brand, setBrand] = useState("none");
+  const [giftspace, setGiftspace] = useState("none");
   const [isOpen, setIsOpen] = useState(false);
   const [barCode, setBarCode] = useState("");
-  const { addCard } = useCardsStore();
+  const queryClient = useQueryClient();
+  const { user } = useUserStore();
+
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
   console.log({ brand });
-  const selectedBrand = brands.find((v) => v.bName === brand);
+
+  async function getBrands(): Promise<TBrand[]> {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/brands`,
+    );
+    return response.json();
+  }
+  const { data: brands } = useQuery({
+    queryKey: ["getBrands"],
+    queryFn: getBrands,
+  });
+
+  const selectedBrand = brands?.find((v) => v.id === brand);
   console.log({ selectedBrand });
+
+  async function getGiftspaces(): Promise<TGiftspace[]> {
+    if (!user) return [];
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/giftspaces/${user?.id}`,
+    );
+    return response.json();
+  }
+
+  const { data: giftspaces } = useQuery({
+    queryKey: ["getGiftspaces"],
+    queryFn: getGiftspaces,
+  });
+
+  const selectedGiftspace = giftspaces?.find((v) => v.id === giftspace);
+
+  const createGiftcard = useMutation({
+    mutationFn: ({
+      brand,
+      code,
+      name,
+      pin,
+      balance,
+      giftspace,
+    }: TCreateGiftcard) => {
+      return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/giftcards`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ brand, code, name, pin, balance, giftspace }),
+      });
+    },
+    onSuccess: async () => {
+      // If you're invalidating a single query
+      await queryClient.invalidateQueries({ queryKey: ["getGiftcards"] });
+    },
+  });
 
   return (
     <div>
@@ -45,7 +100,7 @@ function AddCardModal() {
             {barCode === "" && <BarCodeScanner setBarCode={setBarCode} />}
             {selectedBrand && barCode !== "" ? (
               <img
-                src={selectedBrand.image}
+                src={selectedBrand.imageUrl ?? ""}
                 alt=""
                 className="h-full w-full bg-gray-50 object-contain"
               />
@@ -57,19 +112,41 @@ function AddCardModal() {
             </label>
             <select
               className="rounded-xl border-1 border-gray-300 px-3 py-2"
-              name="SelectedCard"
+              name="Selectedbrand"
               value={brand}
               onChange={(e) => {
                 setBrand(e.target.value);
               }}
             >
               <option value="none" disabled>
-                Select a card
+                Select a brand
               </option>
 
-              {brands.map((brand) => (
-                <option key={brand.bName} value={brand.bName}>
-                  {brand.bName}
+              {brands?.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {brand.name}
+                </option>
+              ))}
+            </select>
+
+            <label className="pl-2 font-normal text-gray-600">
+              Select your giftspace
+            </label>
+            <select
+              className="rounded-xl border-1 border-gray-300 px-3 py-2"
+              name="SelectedCard"
+              value={giftspace}
+              onChange={(e) => {
+                setGiftspace(e.target.value);
+              }}
+            >
+              <option value="none" disabled>
+                Select a giftspace
+              </option>
+
+              {giftspaces?.map((giftspace) => (
+                <option key={giftspace.id} value={giftspace.id}>
+                  {giftspace.name}
                 </option>
               ))}
             </select>
@@ -128,14 +205,15 @@ function AddCardModal() {
             </button>
             <button
               onClick={() => {
-                addCard(
+                createGiftcard.mutate({
                   brand,
-                  name,
-                  barCode,
+                  code: barCode,
                   pin,
-                  balance,
-                  selectedBrand.image,
-                );
+                  balance: balance.trim() === "" ? "-1" : balance,
+                  giftspace,
+                  name,
+                  favorite: false,
+                });
                 toggleModal();
               }}
               className="flex h-10 w-fit items-center rounded-lg border-1 border-blue-700 bg-blue-600 px-3 py-2 font-medium text-amber-50 hover:cursor-pointer hover:border-blue-500 hover:bg-blue-500"

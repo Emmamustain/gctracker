@@ -6,6 +6,9 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { GiftspacesModule } from './giftspaces/giftspaces.module';
+import { GiftcardsModule } from './giftcards/giftcards.module';
+import { BrandsModule } from './brands/brands.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -13,6 +16,9 @@ import { GiftspacesModule } from './giftspaces/giftspaces.module';
     UsersModule,
     AuthModule,
     GiftspacesModule,
+    GiftcardsModule,
+    BrandsModule,
+    CategoriesModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],

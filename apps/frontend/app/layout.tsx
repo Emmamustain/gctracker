@@ -85,7 +85,6 @@ export default function RootLayout({
         >
           <QueryProvider>
             <div id="ui-portal"></div>
-            <Header />
             {children}
           </QueryProvider>
         </ThemeProvider>

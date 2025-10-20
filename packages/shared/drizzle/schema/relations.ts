@@ -9,21 +9,20 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 export const giftspacesRelations = relations(giftspaces, ({ one, many }) => ({
-  users: many(users),
   giftcards: many(giftcards),
   owner: one(users, {
-    fields: [giftspaces.id],
+    fields: [giftspaces.owner],
     references: [users.id],
   }),
 }));
 
 export const giftcardsRelations = relations(giftcards, ({ one }) => ({
   giftspace: one(giftspaces, {
-    fields: [giftcards.id],
+    fields: [giftcards.giftspace],
     references: [giftspaces.id],
   }),
   brand: one(brands, {
-    fields: [giftcards.id],
+    fields: [giftcards.brand],
     references: [brands.id],
   }),
 }));
@@ -31,7 +30,7 @@ export const giftcardsRelations = relations(giftcards, ({ one }) => ({
 export const brandsRelations = relations(brands, ({ one, many }) => ({
   giftcards: many(giftcards),
   category: one(categories, {
-    fields: [brands.id],
+    fields: [brands.category],
     references: [categories.id],
   }),
 }));
