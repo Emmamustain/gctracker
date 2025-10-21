@@ -1,4 +1,4 @@
 import { schema } from "@shared/drizzle";
 
-export type TCategory = Omit<typeof schema.categories.$inferSelect, "password">;
+export type TCategory = typeof schema.categories.$inferSelect;
 export type TReqCategory = { categoryId: string };

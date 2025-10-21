@@ -51,8 +51,6 @@ function AddCardModal() {
     queryFn: getGiftspaces,
   });
 
-  const selectedGiftspace = giftspaces?.find((v) => v.id === giftspace);
-
   const createGiftcard = useMutation({
     mutationFn: ({
       brand,
