@@ -1,23 +1,42 @@
 "use client";
 
 import SearchBar from "@/components/SearchBar/SearchBar.jsx";
-import { Trash2Icon, HistoryIcon } from "lucide-react";
-import useCardStore from "@/hook/useCardsStore.jsx";
-import DeleteCardModal from "@/components/DeleteCardModal/DeleteCardModal.jsx";
-import UpdateCardModal from "@/components/UpdateCardModal/UpdateCardModal.jsx";
+import { HistoryIcon } from "lucide-react";
 import { useParams } from "next/navigation";
+import { TBrand, TGiftcard } from "@shared/types";
+import { useQuery } from "@tanstack/react-query";
 
 function CardPage() {
   const params = useParams();
   const cardId = params.cardId;
-  const { getCardById } = useCardStore();
-  const selectedCard = getCardById(cardId);
 
-  if (!selectedCard) {
-    return <div>Card not found</div>;
+  async function getCard(): Promise<TGiftcard> {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/giftcards/${cardId}`,
+    );
+    return response.json();
   }
+  const { data: giftcard } = useQuery({
+    queryKey: ["getGiftcard"],
+    queryFn: getCard,
+    enabled: Boolean(cardId),
+  });
 
-  const codeCopied = selectedCard.code;
+  console.log({ giftcard });
+
+  async function getBrands(): Promise<TBrand[]> {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/brands`,
+    );
+    return response.json();
+  }
+  const { data: brands } = useQuery({
+    queryKey: ["getBrands"],
+    queryFn: getBrands,
+  });
+
+  const selectedBrand = brands?.find((v) => v.id === giftcard?.brand);
+  const codeCopied = giftcard?.code;
 
   async function copyToClipBoard(copyCode: string) {
     try {
@@ -35,37 +54,37 @@ function CardPage() {
           <SearchBar />
         </div>
 
-        <UpdateCardModal cardId={selectedCard} />
+        {/* <UpdateCardModal cardId={giftcard?.id} /> */}
 
         <div className="mt-6 flex h-[350px] w-full flex-col justify-between overflow-hidden rounded-2xl bg-gray-200 p-4">
           <div className="flex justify-between">
             <div className="flex h-fit w-[100px] items-center justify-between gap-2">
               <div className="h-10 w-fit">
                 <img
-                  src={selectedCard.image}
+                  src={selectedBrand?.imageUrl ?? ""}
                   alt=""
                   className="h-full w-full bg-gray-50 object-contain"
                 />
               </div>
-              <div className="font-semibold">{selectedCard.brand}</div>
+              <div className="font-semibold">{giftcard?.brand}</div>
             </div>
             <div className="text-2xl font-bold text-violet-600">
-              {selectedCard.name}
+              {giftcard?.name}
             </div>
             <div className="flex w-[100px] justify-end font-mono font-semibold text-gray-900">
-              {selectedCard.balance}€
+              {giftcard?.balance}€
             </div>
           </div>
 
           <div className="libre-barcode-39-regular flex h-[100px] w-full scale-y-200 items-center justify-center text-[60px]">
-            {selectedCard.code}
+            {giftcard?.code}
           </div>
 
           <button
-            onClick={() => copyToClipBoard(codeCopied)}
+            onClick={() => copyToClipBoard(codeCopied ?? "")}
             className="flex cursor-pointer items-center justify-center rounded-xl bg-gray-900 px-4 py-3 font-mono text-lg text-amber-50 hover:bg-gray-700"
           >
-            {selectedCard.code}
+            {giftcard?.code}
           </button>
         </div>
 
@@ -75,10 +94,7 @@ function CardPage() {
             Card History
           </div>
 
-          <DeleteCardModal
-            nameCard={selectedCard.name}
-            idCard={selectedCard.id}
-          />
+          {/* <DeleteCardModal nameCard={giftcard?.name} idCard={giftcard?.id} /> */}
         </div>
       </div>
     </>

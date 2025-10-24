@@ -30,9 +30,9 @@ export class GiftcardsController {
     return this.giftcardsService.findOne(id);
   }
 
-  @Get(':giftspaceId')
-  findAllByGiftspace(@Param('giftspaceId') giftspaceId: string) {
-    return this.giftcardsService.findAllByGiftspace(giftspaceId);
+  @Get('/giftspace/:id')
+  findAllByGiftspace(@Param('id') id: string) {
+    return this.giftcardsService.findAllByGiftspace(id);
   }
 
   @Patch(':id')

@@ -1,13 +1,11 @@
 "use client";
-import Categories from "@/components/Categories/Categories";
-import SearchBar from "@/components/SearchBar/SearchBar.jsx";
 
-import Cards from "@/components/Cards/Cards.jsx";
 import { TGiftspace } from "@shared/types";
 import { useUserStore } from "@/stores/user.store";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { LoaderCircleIcon } from "lucide-react";
 
 function Home() {
   const { user } = useUserStore();
@@ -33,16 +31,8 @@ function Home() {
   }, [primaryGiftspace]);
   return (
     <>
-      <div className="p-3">
-        <div className="block md:hidden">
-          <SearchBar />
-        </div>
-        <Categories />
-
-        {/* <FavoriteCards />
-        <DiscoverCards /> */}
-        <Cards favoritesOnly={true} />
-        <Cards favoritesOnly={false} />
+      <div className="flex min-h-screen w-full items-center justify-center">
+        <LoaderCircleIcon size={40} color="gray" />
       </div>
     </>
   );

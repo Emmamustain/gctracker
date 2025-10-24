@@ -35,10 +35,9 @@ export class GiftcardsService {
   }
 
   async findOne(id: string) {
-    return await this.db
-      .select()
-      .from(schema.giftcards)
-      .where(eq(schema.giftcards.id, id));
+    return await this.db.query.giftcards.findFirst({
+      where: eq(schema.giftcards.id, id),
+    });
   }
 
   async findAllByGiftspace(giftspaceId: string) {

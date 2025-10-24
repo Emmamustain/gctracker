@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { PlusCircle, CreditCard } from "lucide-react";
 import { useState } from "react";
 import BarCodeScanner from "@/components/BarCodeScanner/BarCodeScanner";
 import { TBrand, TCreateGiftcard, TGiftspace } from "@shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "@/stores/user.store";
+import { toast } from "sonner";
 
 function AddCardModal() {
   const [name, setName] = useState("");
@@ -21,6 +22,12 @@ function AddCardModal() {
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
+    setBalance("");
+    setBarCode("");
+    setName("");
+    setPin("");
+    setBrand("none");
+    setGiftspace("none");
   };
   console.log({ brand });
 
@@ -49,6 +56,7 @@ function AddCardModal() {
   const { data: giftspaces } = useQuery({
     queryKey: ["getGiftspaces"],
     queryFn: getGiftspaces,
+    enabled: Boolean(user),
   });
 
   const createGiftcard = useMutation({
@@ -213,6 +221,9 @@ function AddCardModal() {
                   favorite: false,
                 });
                 toggleModal();
+                toast.success("Giftcard Created", {
+                  description: "Your giftcard has been created successfully!",
+                });
               }}
               className="flex h-10 w-fit items-center rounded-lg border-1 border-blue-700 bg-blue-600 px-3 py-2 font-medium text-amber-50 hover:cursor-pointer hover:border-blue-500 hover:bg-blue-500"
             >

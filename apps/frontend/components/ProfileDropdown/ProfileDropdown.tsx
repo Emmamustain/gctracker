@@ -17,15 +17,26 @@ import { useUserStore } from "@/stores/user.store";
 
 import { useAuthStore } from "@/stores/auth.store";
 import { AddGiftspaceModal } from "../AddGiftspaceModal/AddGiftspaceModal";
+import { TGiftspace } from "@shared/types";
+import { useRouter } from "next/navigation";
 
 export function ProfileDropdown() {
   const { user } = useUserStore();
   const { logout } = useAuthStore();
+  const router = useRouter();
 
-  async function getGiftspaces() {
+  async function getGiftspaces(): Promise<TGiftspace[]> {
     if (!user) return [];
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/giftspaces/${user?.id}`,
+    );
+    return response.json();
+  }
+
+  async function getSharedGiftspaces(): Promise<TGiftspace[]> {
+    if (!user) return [];
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/giftspaces/shared/${user?.id}`,
     );
     return response.json();
   }
@@ -39,7 +50,12 @@ export function ProfileDropdown() {
     queryKey: ["getGiftspacesByOwner", user],
     queryFn: getGiftspaces,
   });
-  console.log({ giftspaces, isLoading, error });
+
+  const { data: sharedGiftspaces } = useQuery({
+    queryKey: ["getSharedGiftspaces", user],
+    queryFn: getSharedGiftspaces,
+  });
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -55,13 +71,21 @@ export function ProfileDropdown() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuGroup>
+          <DropdownMenuLabel>Your Giftspaces:</DropdownMenuLabel>
+
           {giftspaces &&
-            giftspaces.map((giftspace: { id: string; name: string }) => (
-              <DropdownMenuItem key={giftspace.id}>
+            giftspaces.map((giftspace) => (
+              <DropdownMenuItem
+                key={giftspace.id}
+                onClick={() => {
+                  router.push(`/giftspace/${giftspace.id}`);
+                }}
+              >
                 {giftspace.name}
               </DropdownMenuItem>
             ))}
 
+          {/* Add Giftspace */}
           <DropdownMenuItem
             onClick={(e) => {
               e.preventDefault();
@@ -71,6 +95,21 @@ export function ProfileDropdown() {
             <AddGiftspaceModal />
             <DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
           </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel>Shared Giftspaces:</DropdownMenuLabel>
+
+          {sharedGiftspaces &&
+            sharedGiftspaces.map((giftspace) => (
+              <DropdownMenuItem
+                key={giftspace.id}
+                onClick={() => {
+                  router.push(`/giftspace/${giftspace.id}`);
+                }}
+              >
+                {giftspace.name}
+              </DropdownMenuItem>
+            ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

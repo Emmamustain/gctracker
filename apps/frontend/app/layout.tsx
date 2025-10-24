@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import QueryProvider from "@/providers/query-provider";
 import Header from "@/components/Header/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken-grotesk",
@@ -84,6 +85,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
+            <Toaster />
             <div id="ui-portal"></div>
             {children}
           </QueryProvider>

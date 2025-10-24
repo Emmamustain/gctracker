@@ -51,6 +51,22 @@ export class GiftspacesService {
       .where(eq(schema.giftspaces.owner, owner));
   }
 
+  async findAllShared(userId: string) {
+    return await this.db
+      .select({
+        id: schema.giftspaces.id,
+        name: schema.giftspaces.name,
+        owner: schema.giftspaces.owner,
+        createdAt: schema.giftspaces.createdAt,
+      })
+      .from(schema.giftspacesUsers)
+      .where(eq(schema.giftspacesUsers.userId, userId))
+      .fullJoin(
+        schema.giftspaces,
+        eq(schema.giftspacesUsers.giftspaceId, schema.giftspaces.id),
+      );
+  }
+
   async update(id: string, updateGiftspaceDto: UpdateGiftspaceDto) {
     // Hash password if it's being updated
     const dataToUpdate = { ...updateGiftspaceDto };

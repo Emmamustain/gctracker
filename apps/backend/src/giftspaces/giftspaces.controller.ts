@@ -30,7 +30,12 @@ export class GiftspacesController {
     return this.giftspacesService.findAllByOwner(owner);
   }
 
-  @Get(':id')
+  @Get('/shared/:userId')
+  findAllShared(@Param('userId') userId: string) {
+    return this.giftspacesService.findAllShared(userId);
+  }
+
+  @Get('/one/:id')
   findOne(@Param('id') id: string) {
     return this.giftspacesService.findOne(id);
   }
