@@ -3,7 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["picsum.photos", "loremflickr.com"],
+    domains: ["picsum.photos"],
   },
   output: "standalone",
   outputFileTracingRoot: path.join(__dirname, "../../"),

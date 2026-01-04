@@ -12,6 +12,12 @@ services:
       - app-network
     depends_on:
       - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   backend:
     build:
@@ -22,12 +28,19 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
     ports:
       - "4000:4000"
     networks:
       - app-network
     depends_on:
       - migrator
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/auth/profile"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   migrator:
     build:
@@ -39,7 +52,6 @@ services:
       - app-network
     depends_on:
       - postgres
-    command: sh -c "pnpm --filter @shared/drizzle drizzle:migrate"
 
   adminer:
     image: adminer:latest
@@ -62,6 +74,15 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-mydb}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   app-network:

@@ -26,6 +26,6 @@ mkcert -install
 Write-Host "🔐 Generating certificate for specific domains..." -ForegroundColor Cyan
 # --- UPDATED ---
 # Generate a single certificate for all required domains
-mkcert -cert-file $certFile -key-file $keyFile zennstack.localhost api.zennstack.localhost traefik.zennstack.localhost
+mkcert -cert-file $certFile -key-file $keyFile gctracker.localhost api.gctracker.localhost traefik.gctracker.localhost
 
 Write-Host "✅ Certificates generated successfully in $certDir/" -ForegroundColor Green

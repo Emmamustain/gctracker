@@ -76,7 +76,7 @@ function CardPage() {
             </div>
           </div>
 
-          <div className="libre-barcode-39-regular flex h-[100px] w-full scale-y-200 items-center justify-center text-[60px]">
+          <div className="libre-barcode-128 flex h-[100px] w-full scale-y-200 items-center justify-center text-[60px]">
             {giftcard?.code}
           </div>
 

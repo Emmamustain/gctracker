@@ -1,6 +1,6 @@
 {
-  "id": "c72a51e4-8f53-4f38-abbb-86a39f20e160",
-  "prevId": "3b4fec66-8398-4f97-bb18-6f67be3c9293",
+  "id": "afe129e4-1b07-4e25-8b4d-75b8c9a77d02",
+  "prevId": "a6bb947f-767d-494b-bb49-ae0f956ee001",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -26,30 +26,10 @@
           "type": "varchar(500)",
           "primaryKey": false,
           "notNull": false
-        },
-        "category": {
-          "name": "category",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "brands_category_categories_id_fk": {
-          "name": "brands_category_categories_id_fk",
-          "tableFrom": "brands",
-          "tableTo": "categories",
-          "columnsFrom": [
-            "category"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

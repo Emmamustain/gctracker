@@ -30,7 +30,7 @@ export class BrandsController {
     return this.brandsService.findOne(id);
   }
 
-  @Get(':category')
+  @Get('category/:category')
   findAllByCategory(@Param('category') category: string) {
     return this.brandsService.findAllByCategory(category);
   }

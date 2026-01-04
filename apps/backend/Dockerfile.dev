@@ -1,0 +1,18 @@
+FROM node:20-alpine
+WORKDIR /app
+
+# Copy only workspace configs first to leverage cache
+COPY package.json package-lock.json* ./
+COPY apps/backend/package.json ./apps/backend/
+COPY packages/shared/drizzle/package.json ./packages/shared/drizzle/
+COPY packages/shared/types/package.json ./packages/shared/types/
+
+# Use npm for better stability on Windows/Docker shared volumes
+RUN npm install
+
+# Copy the rest of the code
+COPY . .
+
+EXPOSE 4000
+# Simple start command - npm handles workspaces better without manual symlinking
+CMD ["npm", "run", "start:dev", "--prefix", "apps/backend"]

@@ -9,7 +9,7 @@ services:
       - "8080:8080"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.zennstack.localhost`)"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.gctracker.localhost`)"
       - "traefik.http.routers.dashboard.entrypoints=web-secured"
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.service=api@internal"
@@ -29,16 +29,17 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: apps/frontend/Dockerfile
+      dockerfile: apps/frontend/Dockerfile.dev
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=app-network"
-      - "traefik.http.routers.frontend.rule=Host(`zennstack.localhost`)"
+      - "traefik.http.routers.frontend.rule=Host(`gctracker.localhost`)"
       - "traefik.http.routers.frontend.entrypoints=web-secured"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
     environment:
       - NODE_ENV=development
+      - WATCHPACK_POLLING=true
     ports:
       - "3000:3000"
     networks:
@@ -53,21 +54,30 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/apps/frontend/node_modules
+      - /app/apps/backend/node_modules
+      - /app/packages/shared/drizzle/node_modules
+      - /app/packages/shared/types/node_modules
+      - frontend-next-cache:/app/apps/frontend/.next
 
   backend:
     build:
       context: .
-      dockerfile: apps/backend/Dockerfile
+      dockerfile: apps/backend/Dockerfile.dev
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=app-network"
-      - "traefik.http.routers.backend.rule=Host(`api.zennstack.localhost`)"
+      - "traefik.http.routers.backend.rule=Host(`api.gctracker.localhost`)"
       - "traefik.http.routers.backend.entrypoints=web-secured"
       - "traefik.http.routers.backend.tls=true"
       - "traefik.http.services.backend.loadbalancer.server.port=4000"
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/mydb
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    env_file:
+      - apps/backend/.env
     ports:
       - "4000:4000"
     networks:
@@ -77,6 +87,10 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/apps/frontend/node_modules
+      - /app/apps/backend/node_modules
+      - /app/packages/shared/drizzle/node_modules
+      - /app/packages/shared/types/node_modules
 
   shared-watcher:
     build:
@@ -85,8 +99,7 @@ services:
     networks:
       - app-network
     volumes:
-      - .:/app
-      - /app/node_modules
+      - ./packages/shared:/app/packages/shared
 
   postgres:
     image: postgres:16-alpine
@@ -107,3 +120,4 @@ networks:
 
 volumes:
   postgres_data:
+  frontend-next-cache:

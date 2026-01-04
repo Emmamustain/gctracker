@@ -25,9 +25,28 @@ export class UsersService {
       password: hashedPassword,
     };
 
-    return (
-      await this.db.insert(schema.users).values(userToCreate).returning()
-    )[0];
+    return await this.db.transaction(async (tx) => {
+      const [newUser] = await tx
+        .insert(schema.users)
+        .values(userToCreate)
+        .returning();
+
+      const [personalGiftspace] = await tx
+        .insert(schema.giftspaces)
+        .values({
+          name: 'personal',
+          owner: newUser.id,
+          password: null, // No password for personal giftspace
+        })
+        .returning();
+
+      await tx.insert(schema.giftspacesUsers).values({
+        giftspaceId: personalGiftspace.id,
+        userId: newUser.id,
+      });
+
+      return newUser;
+    });
   }
 
   async findAll() {

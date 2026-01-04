@@ -12,13 +12,24 @@ export class BrandsService {
   constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
 
   async create(createBrandDto: CreateBrandDto): Promise<TBrand> {
+    const { categories, ...brandData } = createBrandDto;
     const brandToCreate = {
-      ...createBrandDto,
+      ...brandData,
     };
 
-    return (
+    const brand = (
       await this.db.insert(schema.brands).values(brandToCreate).returning()
     )[0];
+
+    if (categories && categories.length > 0) {
+      await this.db.insert(schema.categoriesBrands).values(
+        categories.map((categoryId) => ({
+          brandId: brand.id,
+          categoryId: categoryId,
+        })),
+      );
+    }
+    return brand;
   }
 
   async findAll() {
@@ -36,7 +47,11 @@ export class BrandsService {
     return await this.db
       .select()
       .from(schema.brands)
-      .where(eq(schema.brands.category, category));
+      .leftJoin(
+        schema.categoriesBrands,
+        eq(schema.brands.id, schema.categoriesBrands.brandId),
+      )
+      .where(eq(schema.categoriesBrands.categoryId, category));
   }
 
   async update(id: string, updateBrandDto: UpdateBrandDto) {

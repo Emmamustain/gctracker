@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Headers,
 } from '@nestjs/common';
 import { GiftcardsService } from './giftcards.service';
 import { CreateGiftcardDto } from './dto/create-giftcard.dto';
@@ -16,35 +17,48 @@ export class GiftcardsController {
   constructor(private readonly giftcardsService: GiftcardsService) {}
 
   @Post()
-  create(@Body() createGiftcardDto: CreateGiftcardDto) {
-    return this.giftcardsService.create(createGiftcardDto);
+  create(
+    @Body() createGiftcardDto: CreateGiftcardDto,
+    @Headers('x-giftspace-password') password?: string,
+  ) {
+    return this.giftcardsService.create(createGiftcardDto, password);
   }
 
   @Get()
-  findAll() {
-    return this.giftcardsService.findAll();
+  findAll(@Headers('x-giftspace-password') password?: string) {
+    return this.giftcardsService.findAll(password);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.giftcardsService.findOne(id);
+  findOne(
+    @Param('id') id: string,
+    @Headers('x-giftspace-password') password?: string,
+  ) {
+    return this.giftcardsService.findOne(id, password);
   }
 
   @Get('/giftspace/:id')
-  findAllByGiftspace(@Param('id') id: string) {
-    return this.giftcardsService.findAllByGiftspace(id);
+  findAllByGiftspace(
+    @Param('id') id: string,
+    @Headers('x-giftspace-password') password?: string,
+  ) {
+    return this.giftcardsService.findAllByGiftspace(id, password);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateGiftcardDto: UpdateGiftcardDto,
+    @Headers('x-giftspace-password') password?: string,
   ) {
-    return this.giftcardsService.update(id, updateGiftcardDto);
+    return this.giftcardsService.update(id, updateGiftcardDto, password);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.giftcardsService.remove(id);
+  remove(
+    @Param('id') id: string,
+    @Headers('x-giftspace-password') password?: string,
+  ) {
+    return this.giftcardsService.remove(id, password);
   }
 }

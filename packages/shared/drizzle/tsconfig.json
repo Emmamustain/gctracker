@@ -3,9 +3,13 @@
   "compilerOptions": {
     "composite": true,
     "declaration": true,
+    "declarationMap": true,
     "outDir": "./dist",
     "baseUrl": ".",
-    "rootDir": "./"
+    "noImplicitAny": false,
+    "strict": false,
+    "rootDir": "./",
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules", "dist"]

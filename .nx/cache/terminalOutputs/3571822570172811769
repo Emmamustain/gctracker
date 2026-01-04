@@ -1,0 +1,18 @@
+[2m> [22mnpm run build
+
+
+> @shared/types@1.0.0 build
+> tsc -p tsconfig.json
+
+src/brands/brands.types.ts(1,24): error TS6305: Output file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/dist/index.d.ts' has not been built from source file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/index.ts'.
+src/categories/categories.types.ts(1,24): error TS6305: Output file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/dist/index.d.ts' has not been built from source file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/index.ts'.
+src/giftcards/giftcards.types.ts(1,24): error TS6305: Output file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/dist/index.d.ts' has not been built from source file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/index.ts'.
+src/giftspaces/giftspaces.types.ts(1,24): error TS6305: Output file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/dist/index.d.ts' has not been built from source file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/index.ts'.
+src/users/users.types.ts(1,24): error TS6305: Output file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/dist/index.d.ts' has not been built from source file 'C:/Users/TITAN/DEV/WEB2/dn2-gctracker/packages/shared/drizzle/index.ts'.
+npm error Lifecycle script `build` failed with error:
+npm error code 2
+npm error path C:\Users\TITAN\DEV\WEB2\dn2-gctracker\packages\shared\types
+npm error workspace @shared/types@1.0.0
+npm error location C:\Users\TITAN\DEV\WEB2\dn2-gctracker\packages\shared\types
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c tsc -p tsconfig.json

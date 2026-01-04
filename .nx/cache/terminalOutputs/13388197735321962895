@@ -1,0 +1,6 @@
+[2m> [22mnpm run build
+
+
+> @shared/types@1.0.0 build
+> tsc -p tsconfig.json
+

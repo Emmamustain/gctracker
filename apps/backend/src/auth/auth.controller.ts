@@ -4,10 +4,14 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { TUser } from '@shared/types';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private configService: ConfigService,
+  ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
@@ -21,7 +25,10 @@ export class AuthController {
     res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: true,
-      domain: 'zennstack.localhost',
+      domain: this.configService.get<string>(
+        'COOKIE_DOMAIN',
+        'gctracker.localhost',
+      ),
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
@@ -39,7 +46,10 @@ export class AuthController {
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token', {
-      domain: 'zennstack.localhost',
+      domain: this.configService.get<string>(
+        'COOKIE_DOMAIN',
+        'gctracker.localhost',
+      ),
     });
     return { message: 'Logged out successfully' };
   }

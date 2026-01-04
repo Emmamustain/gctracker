@@ -4,9 +4,9 @@ $hostsPath = "$env:windir\System32\drivers\etc\hosts"
 # --- UPDATED ---
 # Define the domains to add
 $domains = @(
-    "zennstack.localhost",
-    "api.zennstack.localhost",
-    "traefik.zennstack.localhost"
+    "gctracker.localhost",
+    "api.gctracker.localhost",
+    "traefik.gctracker.localhost"
 )
 
 # Check if running as administrator

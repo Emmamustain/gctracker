@@ -1,0 +1,31 @@
+http:
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  routers:
+    frontend-http-redirect:
+      rule: Host(`gctracker.localhost`)
+      entrypoints:
+        - web
+      middlewares:
+        - https-redirect
+      service: noop@internal
+
+    backend-http-redirect:
+      rule: Host(`api.gctracker.localhost`)
+      entrypoints:
+        - web
+      middlewares:
+        - https-redirect
+      service: noop@internal
+
+    traefik-http-redirect:
+      rule: Host(`traefik.gctracker.localhost`)
+      entrypoints:
+        - web
+      middlewares:
+        - https-redirect
+      service: noop@internal

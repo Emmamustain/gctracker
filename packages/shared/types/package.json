@@ -8,14 +8,14 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsc --watch -p tsconfig.json"
+    "build": "tsc --build tsconfig.json",
+    "dev": "tsc --build --watch tsconfig.json"
   },
   "dependencies": {
-    "@shared/drizzle": "workspace:^"
+    "@shared/drizzle": "*"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.5.2"
+  "packageManager": "bun@1.1.26"
 }

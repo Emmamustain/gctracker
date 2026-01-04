@@ -1,0 +1,43 @@
+{
+  "name": "@shared/drizzle",
+  "root": "packages/shared/drizzle",
+  "sourceRoot": "packages/shared/drizzle",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json",
+        "cwd": "packages/shared/drizzle"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run dev",
+        "cwd": "packages/shared/drizzle"
+      }
+    },
+    "drizzle:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run drizzle:migrate",
+        "cwd": "packages/shared/drizzle"
+      }
+    },
+    "drizzle:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run drizzle:generate",
+        "cwd": "packages/shared/drizzle"
+      }
+    },
+    "drizzle:studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run drizzle:studio",
+        "cwd": "packages/shared/drizzle"
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk, Syne } from "next/font/google";
+import { Hanken_Grotesk, Syne, Libre_Barcode_128 } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -17,6 +17,12 @@ const syne = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+});
+
+const libreBarcode128 = Libre_Barcode_128({
+  variable: "--font-libre-barcode-128",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -76,7 +82,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${hankenGrotesk.variable} ${syne.variable} max-w-screen overflow-x-hidden antialiased`}
+        className={`${hankenGrotesk.variable} ${syne.variable} ${libreBarcode128.variable} max-w-screen overflow-x-hidden antialiased`}
       >
         <ThemeProvider
           attribute="class"

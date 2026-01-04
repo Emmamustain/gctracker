@@ -40,7 +40,7 @@ CREATE TABLE "giftcards" (
 CREATE TABLE "giftspaces" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"password" varchar(255),
-	"display_name" varchar(100),
+	"display_name" varchar(100) NOT NULL,
 	"owner" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );

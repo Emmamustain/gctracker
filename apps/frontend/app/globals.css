@@ -3,24 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-hanken-grotesk), sans-serif;
-  }
-  .syne {
-    font-family: var(--font-syne), sans-serif;
-  }
-}
-
-@theme inline {
+@theme {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -52,6 +40,22 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-hanken-grotesk), sans-serif;
+  }
+  .syne {
+    font-family: var(--font-syne), sans-serif;
+  }
+  .libre-barcode-128 {
+    font-family: var(--font-libre-barcode-128), sans-serif;
+  }
 }
 
 :root {

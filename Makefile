@@ -6,7 +6,7 @@ ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 setup: init hosts-config generate-certs
 	@echo $(HR)
 	@echo 🧱 Building TypeScript projects: shared/types and shared/drizzle...
-	pnpm tsc -b packages/shared/types packages/shared/drizzle
+	npm run build:shared
 	@echo ✅ TypeScript build completed!
 	@echo 🎉 Setup complete! Run 'make help' for commands.
 	@echo $(HR)
@@ -19,8 +19,9 @@ endif
 	@echo 🚀 Setting up Next-Nest Monorepo Project...
 	@echo $(HR)
 	@echo 📦 Installing dependencies...
-	pnpm install
+	npm install
 	@echo ✅ Dependencies installed successfully!
+
 	@echo 📁 Project structure:
 	@echo   apps/frontend  - Next.js Frontend
 	@echo   apps/backend   - Nest.js Backend
@@ -38,11 +39,11 @@ else
 	-@if [ $$(id -u) -ne 0 ]; then \
 		echo "⚠️ Warning: Not running as root - hosts file will not be updated"; \
 		echo "💡 To enable local domain access, manually add these entries to your hosts file:"; \
-		echo "   127.0.0.1 zennstack.localhost"; \
-		echo "   127.0.0.1 api.zennstack.localhost"; \
-		echo "   127.0.0.1 traefik.zennstack.localhost"; \
+		echo "   127.0.0.1 gctracker.localhost"; \
+		echo "   127.0.0.1 api.gctracker.localhost"; \
+		echo "   127.0.0.1 traefik.gctracker.localhost"; \
 	else \
-		for domain in zennstack.localhost api.zennstack.localhost traefik.zennstack.localhost; do \
+		for domain in gctracker.localhost api.gctracker.localhost traefik.gctracker.localhost; do \
 		    if ! grep -q "127.0.0.1 $$domain" /etc/hosts; then \
 		        echo "127.0.0.1 $$domain" >> /etc/hosts; \
 		    fi; \
@@ -130,21 +131,21 @@ endif
 dev:
 	@echo $(HR)
 	@echo 🛠️  Starting development environment...
-	pnpm dev
+	npm run dev
 
 build:
 	@echo $(HR)
 	@echo 🏗️  Building all packages and applications...
-	pnpm build
+	npm run nx:build
 
 clean:
 	@echo $(HR)
 	@echo 🧹 Cleaning up...
-	rm -rf node_modules
-	rm -rf apps/*/node_modules
-	rm -rf packages/*/node_modules
-	rm -rf apps/*/dist
-	rm -rf packages/*/dist
+	npx rimraf node_modules
+	npx rimraf apps/*/node_modules
+	npx rimraf packages/*/node_modules
+	npx rimraf apps/*/dist
+	npx rimraf packages/*/dist
 
 # --- Help ---
 help:
@@ -171,7 +172,6 @@ endif
 	@echo ""
 	@echo "--- Package Management (run while containers are up) ---"
 	@echo "make add-frontend-dep <name> - Add a dependency to the frontend"
-	@echo "make pnpm-frontend <name> - run pnpm on the frontend"
 	@echo "make add-frontend-dev <name> - Add a dev dependency to the frontend"
 	@echo "make add-backend-dep <name>  - Add a dependency to the backend"
 	@echo "make add-backend-dev <name>  - Add a dev dependency to the backend"
@@ -200,48 +200,27 @@ frontend:
 
 # --- Package Management ---
 add-frontend-dep:
-	@if [ -z "$(ARGS)" ]; then \
-		echo "❌ Error: Missing package name. Usage: make add-frontend-dep <package-name>"; \
-		exit 1; \
-	fi
+	@$(if $(ARGS),,echo "❌ Error: Missing package name. Usage: make add-frontend-dep <package-name>" && exit 1)
 	@echo "📦 Installing dependency '$(ARGS)' in frontend container..."
-	docker-compose -f docker-compose.dev.yml exec frontend pnpm add $(ARGS)
-	@echo "✅ Done."
-
-pnpm-frontend:
-	@if [ -z "$(ARGS)" ]; then \
-		echo "❌ Error: Missing package name. Usage: make pnpm-frontend <package-name>"; \
-		exit 1; \
-	fi
-	@echo "📦 Installing dependency '$(ARGS)' in frontend container..."
-	docker-compose -f docker-compose.dev.yml exec frontend pnpm $(ARGS)
+	docker-compose -f docker-compose.dev.yml exec frontend npm install $(ARGS)
 	@echo "✅ Done."
 
 add-frontend-dev:
-	@if [ -z "$(ARGS)" ]; then \
-		echo "❌ Error: Missing package name. Usage: make add-frontend-dev <package-name>"; \
-		exit 1; \
-	fi
+	@$(if $(ARGS),,echo "❌ Error: Missing package name. Usage: make add-frontend-dev <package-name>" && exit 1)
 	@echo "📦 Installing dev dependency '$(ARGS)' in frontend container..."
-	docker-compose -f docker-compose.dev.yml exec frontend pnpm add -D $(ARGS)
+	docker-compose -f docker-compose.dev.yml exec frontend npm install -D $(ARGS)
 	@echo "✅ Done."
 
 add-backend-dep:
-	@if [ -z "$(ARGS)" ]; then \
-		echo "❌ Error: Missing package name. Usage: make add-backend-dep <package-name>"; \
-		exit 1; \
-	fi
+	@$(if $(ARGS),,echo "❌ Error: Missing package name. Usage: make add-backend-dep <package-name>" && exit 1)
 	@echo "📦 Installing dependency '$(ARGS)' in backend container..."
-	docker-compose -f docker-compose.dev.yml exec backend pnpm add $(ARGS)
+	docker-compose -f docker-compose.dev.yml exec backend npm install $(ARGS)
 	@echo "✅ Done."
 
 add-backend-dev:
-	@if [ -z "$(ARGS)" ]; then \
-		echo "❌ Error: Missing package name. Usage: make add-backend-dev <package-name>"; \
-		exit 1; \
-	fi
+	@$(if $(ARGS),,echo "❌ Error: Missing package name. Usage: make add-backend-dev <package-name>" && exit 1)
 	@echo "📦 Installing dev dependency '$(ARGS)' in backend container..."
-	docker-compose -f docker-compose.dev.yml exec backend pnpm add -D $(ARGS)
+	docker-compose -f docker-compose.dev.yml exec backend npm install -D $(ARGS)
 	@echo "✅ Done."
 
 # --- Shadcn Commands ---
@@ -251,35 +230,36 @@ shadcn-add:
 		exit 1; \
 	fi
 	@echo "📦 Installing dependency '$(ARGS)' in frontend container..."
-	@cd apps/frontend && pnpm dlx shadcn@latest add $(ARGS)
+	@cd apps/frontend && npx shadcn@latest add $(ARGS)
 	@echo "✅ Shadcn UI component files generated in container."
-	@echo "🔄 Running pnpm install inside frontend container to sync dependencies..."
-	docker-compose -f docker-compose.dev.yml exec -u $(shell id -u):$(shell id -g) frontend pnpm install
+	@echo "🔄 Running npm install inside frontend container to sync dependencies..."
+	docker-compose -f docker-compose.dev.yml exec -u $(shell id -u):$(shell id -g) frontend npm install
 	@echo "✅ Frontend container dependencies synced."
-	@echo "📦 Running pnpm install on host to update monorepo dependencies..."
-	pnpm install
+	@echo "📦 Running npm install on host to update monorepo dependencies..."
+	npm install
 	@echo "✅ Done."
 
 # --- Database Commands ---
 db-migrate:
 	@echo $(HR)
 	@echo 🔄 Running database migrations...
-	@cd packages/shared/drizzle && pnpm drizzle-kit push
+	@cd packages/shared/drizzle && npm run drizzle:migrate
 
 db-seed:
 	@echo $(HR)
 	@echo 🔄 Seeding the database...
-	@cd packages/shared/drizzle && pnpx ts-node ./seed.ts
+	@cd packages/shared/drizzle && npm run drizzle:seed
 
 db-studio:
 	@echo $(HR)
 	@echo 🛠️  Opening Drizzle Studio...
-	@cd packages/shared/drizzle && pnpm drizzle-kit studio
+	@cd packages/shared/drizzle && npm run drizzle:studio
 
 db-generate:
 	@echo $(HR)
 	@echo 🛠️  Generating the SQL migration based on the current schema...
-	@cd packages/shared/drizzle && pnpm drizzle-kit generate
+	@cd packages/shared/drizzle && npm run drizzle:generate
+
 	@:
 
 .PHONY: setup init hosts-config generate-certs up upd down restart prod prod-up prod-down prod-build dev build clean help add-frontend-dep add-frontend-dev add-backend-dep add-backend-dev db-migrate db-seed db-studio db-generate

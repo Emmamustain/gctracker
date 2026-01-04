@@ -27,14 +27,11 @@ export const giftcardsRelations = relations(giftcards, ({ one }) => ({
   }),
 }));
 
-export const brandsRelations = relations(brands, ({ one, many }) => ({
+export const brandsRelations = relations(brands, ({ many }) => ({
   giftcards: many(giftcards),
-  category: one(categories, {
-    fields: [brands.category],
-    references: [categories.id],
-  }),
+  categories: many(categories),
 }));
 
-export const categoriesRelations = relations(categories, ({ one, many }) => ({
+export const categoriesRelations = relations(categories, ({ many }) => ({
   brands: many(brands),
 }));

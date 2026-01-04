@@ -33,19 +33,34 @@ async function main() {
   // CLEANUP: reverse dependency order
   // Junctions (many-to-many) first
   console.log("🧹 Cleaning...");
-  await db.delete(schema.giftspacesGiftcards);
-  await db.delete(schema.giftspacesUsers);
-  await db.delete(schema.brandsGiftcards);
-  await db.delete(schema.categoriesBrands);
+
+  // Helper to safely delete from tables that may not exist
+  const safeDelete = async (table: any, tableName: string) => {
+    try {
+      await db.delete(table);
+    } catch (err: any) {
+      // Ignore "relation does not exist" errors (table hasn't been created yet)
+      if (err?.code === "42P01") {
+        console.log(`⚠️  Table ${tableName} does not exist, skipping cleanup`);
+      } else {
+        throw err;
+      }
+    }
+  };
+
+  await safeDelete(schema.giftspacesGiftcards, "giftspacesGiftcards");
+  await safeDelete(schema.giftspacesUsers, "giftspacesUsers");
+  await safeDelete(schema.brandsGiftcards, "brandsGiftcards");
+  await safeDelete(schema.categoriesBrands, "categoriesBrands");
 
   // Dependents
-  await db.delete(schema.giftcards);
-  await db.delete(schema.giftspaces);
-  await db.delete(schema.brands);
+  await safeDelete(schema.giftcards, "giftcards");
+  await safeDelete(schema.giftspaces, "giftspaces");
+  await safeDelete(schema.brands, "brands");
 
   // Bases
-  await db.delete(schema.users);
-  await db.delete(schema.categories);
+  await safeDelete(schema.users, "users");
+  await safeDelete(schema.categories, "categories");
 
   // BASE TABLES
   // Categories
@@ -90,8 +105,8 @@ async function main() {
           i === 0
             ? USER_ROLES.ADMIN
             : i < 3
-            ? USER_ROLES.MODERATOR
-            : USER_ROLES.USER,
+              ? USER_ROLES.MODERATOR
+              : USER_ROLES.USER,
         // lastLoginAt left null or random
         lastLoginAt: faker.date.recent({ days: 30 }),
       }))
