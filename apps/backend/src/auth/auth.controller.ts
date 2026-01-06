@@ -22,13 +22,15 @@ export class AuthController {
 
     const { access_token, user } = this.authService.login(req.user as TUser);
 
+    const cookieDomain = this.configService
+      .get<string>('COOKIE_DOMAIN', 'gctracker.localhost')
+      .replace(/^https?:\/\//, '') // Remove http:// or https://
+      .replace(/\/$/, ''); // Remove trailing slash
+
     res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: true,
-      domain: this.configService.get<string>(
-        'COOKIE_DOMAIN',
-        'gctracker.localhost',
-      ),
+      domain: cookieDomain,
       sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
@@ -45,11 +47,13 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
+    const cookieDomain = this.configService
+      .get<string>('COOKIE_DOMAIN', 'gctracker.localhost')
+      .replace(/^https?:\/\//, '') // Remove http:// or https://
+      .replace(/\/$/, ''); // Remove trailing slash
+
     res.clearCookie('access_token', {
-      domain: this.configService.get<string>(
-        'COOKIE_DOMAIN',
-        'gctracker.localhost',
-      ),
+      domain: cookieDomain,
     });
     return { message: 'Logged out successfully' };
   }
