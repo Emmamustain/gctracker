@@ -13,12 +13,6 @@ services:
       - coolify
     depends_on:
       - backend
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
   backend:
     build:
@@ -39,12 +33,6 @@ services:
       - coolify
     depends_on:
       - migrator
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
   migrator:
     build:
@@ -78,15 +66,6 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-mydb}",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 networks:
   app-network:
