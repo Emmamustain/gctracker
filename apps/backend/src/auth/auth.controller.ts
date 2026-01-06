@@ -31,7 +31,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       domain: cookieDomain,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
 
@@ -54,6 +54,8 @@ export class AuthController {
 
     res.clearCookie('access_token', {
       domain: cookieDomain,
+      secure: true,
+      sameSite: 'none',
     });
     return { message: 'Logged out successfully' };
   }
