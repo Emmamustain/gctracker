@@ -23,15 +23,9 @@ services:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile.prod
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`api-gctracker.neurocrow.vip`)"
-      - "traefik.http.routers.backend.entrypoints=websecure"
-      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.backend.tls=true"
-      - "traefik.http.services.backend.loadbalancer.server.port=4000"
     environment:
       - NODE_ENV=production
+      - PORT=4000
       - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/mydb}
       - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-change-in-production}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
