@@ -33,6 +33,12 @@ services:
       - coolify
     depends_on:
       - migrator
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   migrator:
     build:
