@@ -119,7 +119,7 @@ function CardPage() {
             <div className="bg-background h-16 w-16 overflow-hidden rounded-2xl border p-2 shadow-sm">
               <img
                 src={selectedBrand?.imageUrl ?? ""}
-                alt={giftcard.name}
+                alt={giftcard.name ?? ""}
                 className="h-full w-full object-contain"
               />
             </div>
