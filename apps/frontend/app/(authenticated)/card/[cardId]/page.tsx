@@ -1,14 +1,27 @@
 "use client";
 
 import SearchBar from "@/components/SearchBar/SearchBar.jsx";
-import { HistoryIcon } from "lucide-react";
-import { useParams } from "next/navigation";
+import {
+  HistoryIcon,
+  Copy,
+  ArrowLeft,
+  Trash2,
+  Edit3,
+  CreditCard,
+} from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { TBrand, TGiftcard } from "@shared/types";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
+import UpdateCardModal from "@/components/UpdateCardModal/UpdateCardModal";
 
 function CardPage() {
   const params = useParams();
-  const cardId = params.cardId;
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const cardId = params.cardId as string;
 
   async function getCard(): Promise<TGiftcard> {
     const response = await fetch(
@@ -16,13 +29,32 @@ function CardPage() {
     );
     return response.json();
   }
-  const { data: giftcard } = useQuery({
-    queryKey: ["getGiftcard"],
+  const { data: giftcard } = useQuery<TGiftcard>({
+    queryKey: ["getGiftcard", cardId],
     queryFn: getCard,
     enabled: Boolean(cardId),
   });
 
-  console.log({ giftcard });
+  const deleteCard = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/giftcards/${cardId}`,
+        {
+          method: "DELETE",
+        },
+      );
+      if (!response.ok) throw new Error("Failed to delete card");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getGiftcards"] });
+      toast.success("Card deleted successfully");
+      router.push("/");
+    },
+    onError: () => {
+      toast.error("Failed to delete card");
+    },
+  });
 
   async function getBrands(): Promise<TBrand[]> {
     const response = await fetch(
@@ -30,74 +62,121 @@ function CardPage() {
     );
     return response.json();
   }
-  const { data: brands } = useQuery({
+  const { data: brands } = useQuery<TBrand[]>({
     queryKey: ["getBrands"],
     queryFn: getBrands,
   });
 
   const selectedBrand = brands?.find((v: TBrand) => v.id === giftcard?.brand);
-  const codeCopied = giftcard?.code;
 
   async function copyToClipBoard(copyCode: string) {
     try {
       await navigator.clipboard.writeText(copyCode);
-      alert("code bar copied successfully!");
+      toast.success("Code copied to clipboard!");
     } catch (error) {
-      console.error("Failed to copy text", error);
+      toast.error("Failed to copy code");
     }
   }
 
+  if (!giftcard) return null;
+
   return (
-    <>
-      <div className="w-full max-w-[800px] justify-self-center p-2">
-        <div className="block md:hidden">
-          <SearchBar />
-        </div>
-
-        {/* <UpdateCardModal cardId={giftcard?.id} /> */}
-
-        <div className="mt-6 flex h-[350px] w-full flex-col justify-between overflow-hidden rounded-2xl bg-gray-200 p-4">
-          <div className="flex justify-between">
-            <div className="flex h-fit w-[100px] items-center justify-between gap-2">
-              <div className="h-10 w-fit">
-                <img
-                  src={selectedBrand?.imageUrl ?? ""}
-                  alt=""
-                  className="h-full w-full bg-gray-50 object-contain"
-                />
-              </div>
-              <div className="font-semibold">{giftcard?.brand}</div>
-            </div>
-            <div className="text-2xl font-bold text-violet-600">
-              {giftcard?.name}
-            </div>
-            <div className="flex w-[100px] justify-end font-mono font-semibold text-gray-900">
-              {giftcard?.balance}€
-            </div>
-          </div>
-
-          <div className="libre-barcode-128 flex h-[100px] w-full scale-y-200 items-center justify-center text-[60px]">
-            {giftcard?.code}
-          </div>
-
-          <button
-            onClick={() => copyToClipBoard(codeCopied ?? "")}
-            className="flex cursor-pointer items-center justify-center rounded-xl bg-gray-900 px-4 py-3 font-mono text-lg text-amber-50 hover:bg-gray-700"
+    <div className="container mx-auto max-w-2xl px-4 py-8">
+      <div className="mb-6 flex items-center justify-between">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => router.back()}
+          className="gap-2"
+        >
+          <ArrowLeft size={16} />
+          Back
+        </Button>
+        <div className="flex gap-2">
+          <UpdateCardModal giftcard={giftcard} />
+          <Button
+            variant="destructive"
+            size="icon"
+            className="h-9 w-9"
+            onClick={() => {
+              if (
+                confirm(`Are you sure you want to delete ${giftcard.name}?`)
+              ) {
+                deleteCard.mutate();
+              }
+            }}
+            disabled={deleteCard.isPending}
           >
-            {giftcard?.code}
-          </button>
-        </div>
-
-        <div className="mt-4 flex h-fit w-full justify-between px-4 font-medium text-gray-600">
-          <div className="flex cursor-pointer items-center hover:text-gray-500">
-            <HistoryIcon size={18} className="mr-2" />
-            Card History
-          </div>
-
-          {/* <DeleteCardModal nameCard={giftcard?.name} idCard={giftcard?.id} /> */}
+            <Trash2 size={16} />
+          </Button>
         </div>
       </div>
-    </>
+
+      <div className="bg-card text-card-foreground overflow-hidden rounded-3xl border shadow-xl">
+        {/* Card Header/Brand */}
+        <div className="bg-muted/50 relative flex h-32 w-full items-center justify-between p-6">
+          <div className="flex items-center gap-4">
+            <div className="bg-background h-16 w-16 overflow-hidden rounded-2xl border p-2 shadow-sm">
+              <img
+                src={selectedBrand?.imageUrl ?? ""}
+                alt={giftcard.name}
+                className="h-full w-full object-contain"
+              />
+            </div>
+            <div>
+              <h1 className="syne text-2xl font-bold tracking-tight">
+                {giftcard.name}
+              </h1>
+              <p className="text-muted-foreground text-sm font-medium">
+                {selectedBrand?.name || giftcard.brand}
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
+              Balance
+            </p>
+            <p className="text-primary text-3xl font-bold">
+              {giftcard.balance}€
+            </p>
+          </div>
+        </div>
+
+        <Separator />
+
+        {/* Barcode Section */}
+        <div className="bg-background flex flex-col items-center justify-center space-y-8 p-10">
+          <div className="border-muted-foreground/20 hover:border-primary/20 flex w-full flex-col items-center justify-center space-y-4 rounded-2xl border-2 border-dashed p-8 transition-colors">
+            <div className="libre-barcode-128 text-foreground flex h-24 items-center justify-center text-[80px] leading-none select-none">
+              {giftcard.code}
+            </div>
+            <p className="text-muted-foreground font-mono text-sm tracking-[0.2em] uppercase">
+              {giftcard.code}
+            </p>
+          </div>
+
+          <Button
+            className="hover:shadow-primary/20 h-14 w-full rounded-2xl text-lg font-semibold shadow-lg transition-all active:scale-[0.98]"
+            onClick={() => copyToClipBoard(giftcard.code)}
+          >
+            <Copy className="mr-2 h-5 w-5" />
+            Copy Card Number
+          </Button>
+        </div>
+
+        {/* Footer info */}
+        <div className="bg-muted/30 flex items-center justify-between border-t px-8 py-4">
+          <div className="text-muted-foreground hover:text-foreground flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors">
+            <HistoryIcon size={16} />
+            Transaction History
+          </div>
+          <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <CreditCard size={14} />
+            Gift Card
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

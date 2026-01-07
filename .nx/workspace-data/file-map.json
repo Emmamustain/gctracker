@@ -17,6 +17,62 @@
         "hash": "1309831674101033352"
       },
       {
+        "file": "scripts/generate-certs.sh",
+        "hash": "3849860937483037028"
+      },
+      {
+        "file": "traefik.yml",
+        "hash": "10577251655029807706"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "10863184060491050146"
+      },
+      {
+        "file": "scripts/set-encoding.ps1",
+        "hash": "6988878390737283264"
+      },
+      {
+        "file": "scripts/update-hosts.ps1",
+        "hash": "12259285277355610258"
+      },
+      {
+        "file": "scripts/generate-certs.ps1",
+        "hash": "15932620046052413291"
+      },
+      {
+        "file": "Makefile",
+        "hash": "14151608038742998290"
+      },
+      {
+        "file": "dynamic/tls.yml",
+        "hash": "14799249824448780844"
+      },
+      {
+        "file": "docker-compose.prod.yml",
+        "hash": "10667408089320966868"
+      },
+      {
+        "file": "nx.json",
+        "hash": "8137733918527548803"
+      },
+      {
+        "file": "docker-compose.dev.yml",
+        "hash": "4926645847217669030"
+      },
+      {
+        "file": "Dockerfile.migrator",
+        "hash": "14468224203516358978"
+      },
+      {
+        "file": "package.json",
+        "hash": "13580117715799117301"
+      },
+      {
+        "file": ".dockerignore",
+        "hash": "7457224397028210033"
+      },
+      {
         "file": "dynamic/redirect.yml",
         "hash": "2380035390084817808"
       },
@@ -25,68 +81,12 @@
         "hash": "296843763790540681"
       },
       {
-        "file": "scripts/generate-certs.ps1",
-        "hash": "15932620046052413291"
-      },
-      {
-        "file": "dynamic/tls.yml",
-        "hash": "14799249824448780844"
-      },
-      {
-        "file": "nx.json",
-        "hash": "8137733918527548803"
-      },
-      {
-        "file": "scripts/generate-certs.sh",
-        "hash": "3849860937483037028"
-      },
-      {
-        "file": "scripts/update-hosts.ps1",
-        "hash": "12259285277355610258"
-      },
-      {
-        "file": "scripts/set-encoding.ps1",
-        "hash": "6988878390737283264"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "6953080631049119133"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "10863184060491050146"
-      },
-      {
-        "file": ".dockerignore",
-        "hash": "7457224397028210033"
-      },
-      {
-        "file": "docker-compose.prod.yml",
-        "hash": "10667408089320966868"
-      },
-      {
-        "file": "docker-compose.dev.yml",
-        "hash": "4926645847217669030"
-      },
-      {
-        "file": "traefik.yml",
-        "hash": "10577251655029807706"
-      },
-      {
-        "file": "package.json",
-        "hash": "13580117715799117301"
-      },
-      {
         "file": "Dockerfile.watcher",
         "hash": "153792555867859790"
       },
       {
-        "file": "Makefile",
-        "hash": "14151608038742998290"
-      },
-      {
-        "file": "Dockerfile.migrator",
-        "hash": "14468224203516358978"
+        "file": ".gitignore",
+        "hash": "6953080631049119133"
       }
     ],
     "projectFileMap": {

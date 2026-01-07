@@ -123,14 +123,31 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-hanken-grotesk), sans-serif;
+  }
+  .syne {
+    font-family: var(--font-syne), sans-serif;
+  }
+  .libre-barcode-128 {
+    font-family: var(--font-libre-barcode-128), sans-serif;
   }
 }
 
 @keyframes scan {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 .animate-scan {
   position: absolute;
