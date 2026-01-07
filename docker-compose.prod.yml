@@ -24,7 +24,7 @@ services:
       - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-change-in-production}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-https://gctracker.neurocrow.vip}
       - ENCRYPTION_KEY=${ENCRYPTION_KEY:-your_32_chars_long_secret_key_123}
-      - COOKIE_DOMAIN=${COOKIE_DOMAIN:-gctracker.neurocrow.vip}
+      - COOKIE_DOMAIN=${COOKIE_DOMAIN:-.neurocrow.vip}
     ports:
       - "4000:4000"
     networks:

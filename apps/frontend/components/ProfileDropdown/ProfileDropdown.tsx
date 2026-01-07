@@ -19,11 +19,23 @@ import { useAuthStore } from "@/stores/auth.store";
 import { AddGiftspaceModal } from "../AddGiftspaceModal/AddGiftspaceModal";
 import { TGiftspace } from "@shared/types";
 import { useRouter } from "next/navigation";
+import { minidenticon } from "minidenticons";
+import { useMemo, useState } from "react";
+import { Settings } from "lucide-react";
+import { GiftspaceSettingsModal } from "../GiftspaceSettingsModal/GiftspaceSettingsModal";
 
 export function ProfileDropdown() {
+  const [settingsGiftspace, setSettingsGiftspace] = useState<TGiftspace | null>(
+    null,
+  );
   const { user } = useUserStore();
   const { logout } = useAuthStore();
   const router = useRouter();
+
+  const avatarSvg = useMemo(() => {
+    if (!user?.username) return "";
+    return minidenticon(user.username, 95, 45);
+  }, [user?.username]);
 
   async function getGiftspaces(): Promise<TGiftspace[]> {
     if (!user) return [];
@@ -62,26 +74,51 @@ export function ProfileDropdown() {
         <Button variant="outline">{user?.username}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">
-        <DropdownMenuLabel className="justify-left flex items-center gap-2">
-          <div className="flex h-[40px] w-[40px] items-center justify-center bg-red-400">
-            photo
+        <DropdownMenuLabel className="flex items-center gap-3">
+          <div className="bg-muted flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg shadow-inner">
+            <div
+              className="h-full w-full bg-white"
+              dangerouslySetInnerHTML={{ __html: avatarSvg }}
+            />
           </div>
-          <div>
-            <div>{user?.username}</div>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold">{user?.username}</span>
+            <span className="text-muted-foreground text-xs font-normal">
+              Personal Account
+            </span>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuLabel>Your Giftspaces:</DropdownMenuLabel>
 
           {giftspaces &&
-            giftspaces.map((giftspace) => (
+            giftspaces.map((giftspace: TGiftspace) => (
               <DropdownMenuItem
                 key={giftspace.id}
-                onClick={() => {
-                  router.push(`/giftspace/${giftspace.id}`);
+                className="flex items-center justify-between"
+                onSelect={(e) => {
+                  e.preventDefault();
                 }}
               >
-                {giftspace.name}
+                <span
+                  className="flex-1 cursor-pointer"
+                  onClick={() => {
+                    router.push(`/giftspace/${giftspace.id}`);
+                  }}
+                >
+                  {giftspace.name}
+                </span>
+                {giftspace.name.toLowerCase() !== "personal" && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSettingsGiftspace(giftspace);
+                    }}
+                    className="hover:bg-accent ml-2 rounded p-1"
+                  >
+                    <Settings className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </DropdownMenuItem>
             ))}
 
@@ -97,22 +134,48 @@ export function ProfileDropdown() {
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
-          <DropdownMenuLabel>Shared Giftspaces:</DropdownMenuLabel>
-
-          {sharedGiftspaces &&
-            sharedGiftspaces.map((giftspace) => (
-              <DropdownMenuItem
-                key={giftspace.id}
-                onClick={() => {
-                  router.push(`/giftspace/${giftspace.id}`);
-                }}
-              >
-                {giftspace.name}
-              </DropdownMenuItem>
-            ))}
+          {sharedGiftspaces && sharedGiftspaces.length > 0 && (
+            <>
+              <DropdownMenuLabel>Shared Giftspaces:</DropdownMenuLabel>
+              {sharedGiftspaces.map((giftspace: TGiftspace) => (
+                <DropdownMenuItem
+                  key={giftspace.id}
+                  className="flex items-center justify-between"
+                  onSelect={(e) => {
+                    e.preventDefault();
+                  }}
+                >
+                  <span
+                    className="flex-1 cursor-pointer"
+                    onClick={() => {
+                      router.push(`/giftspace/${giftspace.id}`);
+                    }}
+                  >
+                    {giftspace.name}
+                  </span>
+                  {giftspace.name.toLowerCase() !== "personal" && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSettingsGiftspace(giftspace);
+                      }}
+                      className="hover:bg-accent ml-2 rounded p-1"
+                    >
+                      <Settings className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+            </>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            router.push("/settings");
+          }}
+        >
           Settings
           <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
@@ -127,6 +190,16 @@ export function ProfileDropdown() {
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
+
+      {settingsGiftspace && (
+        <GiftspaceSettingsModal
+          giftspace={settingsGiftspace}
+          isOpen={!!settingsGiftspace}
+          onOpenChange={(open) => {
+            if (!open) setSettingsGiftspace(null);
+          }}
+        />
+      )}
     </DropdownMenu>
   );
 }

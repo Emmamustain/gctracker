@@ -2,6 +2,7 @@ import { HeartIcon } from "lucide-react";
 import React from "react";
 import { TGiftcard, TUpdateCard } from "@shared/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/utils/clsx";
 
 type CardProps = Pick<TGiftcard, "favorite" | "id"> & { logo?: string };
 
@@ -19,36 +20,43 @@ function Card({ favorite, id, logo }: CardProps) {
       });
     },
     onSuccess: async () => {
-      // If you're invalidating a single query
       await queryClient.invalidateQueries({ queryKey: ["getGiftcards"] });
     },
   });
 
   return (
-    <a key={id} href={`/card/${id}`}>
-      <div className="flex h-[200px] w-[350px] justify-center rounded-lg border-1 border-gray-200 bg-gray-100 shadow-md">
+    <a
+      key={id}
+      href={`/card/${id}`}
+      className="group relative flex flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md hover:ring-1 hover:ring-ring/20"
+    >
+      <div className="flex aspect-[1.6/1] items-center justify-center bg-muted/30 p-6">
         <img
           src={`${logo}`}
           alt={`${logo} Logo Card`}
-          className="max-w-64 rounded-lg object-contain"
+          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
-        <button
-          className="mt-2 h-fit w-fit cursor-pointer rounded-4xl bg-gray-200 p-1"
-          onClick={(e) => {
-            updateFavorite.mutate({
-              favorite: !favorite,
-            });
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        >
-          <HeartIcon
-            size={23}
-            fill={favorite ? "red" : "transparent"}
-            color={favorite ? "red" : "black"}
-          />
-        </button>
       </div>
+      
+      <button
+        className={cn(
+          "absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm transition-all hover:scale-110",
+          favorite ? "text-red-500" : "text-muted-foreground hover:text-foreground"
+        )}
+        onClick={(e) => {
+          updateFavorite.mutate({
+            favorite: !favorite,
+          });
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
+        <HeartIcon
+          size={18}
+          fill={favorite ? "currentColor" : "none"}
+          className="transition-colors"
+        />
+      </button>
     </a>
   );
 }

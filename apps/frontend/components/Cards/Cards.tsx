@@ -12,30 +12,39 @@ function Cards({ favoritesOnly }: CardProps) {
   const params = useParams();
   const giftspaceId = params["giftspace_id"];
 
-  async function getCards(): Promise<TGiftcard[]> {
+  const getCards = async (): Promise<TGiftcard[]> => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/giftcards/giftspace/${params["giftspace_id"]}`,
     );
-    return response.json();
-  }
+    if (!response.ok) {
+      throw new Error("Failed to fetch cards");
+    }
+    const data: TGiftcard[] = await response.json();
+    return data;
+  };
 
-  async function getBrands(): Promise<TBrand[]> {
+  const getBrands = async (): Promise<TBrand[]> => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/brands`,
     );
-    return response.json();
-  }
+    if (!response.ok) {
+      throw new Error("Failed to fetch brands");
+    }
+    const data: TBrand[] = await response.json();
+    return data;
+  };
+
   const { data: brands } = useQuery({
     queryKey: ["getBrands"],
     queryFn: getBrands,
-  });
+  }) as { data: TBrand[] | undefined };
 
-  // Queries
+  // Queries - Force the type explicitly to fix inference issues
   const { data: cards } = useQuery({
-    queryKey: ["getGiftcards"],
+    queryKey: ["getGiftcards", giftspaceId],
     queryFn: getCards,
     enabled: Boolean(giftspaceId),
-  });
+  }) as { data: TGiftcard[] | undefined };
   console.log({ cards });
 
   const hasCards =
@@ -44,11 +53,11 @@ function Cards({ favoritesOnly }: CardProps) {
   if (!hasCards) return;
 
   return (
-    <div className="mt-[45px] w-full">
-      <h1 className="pl-2 text-lg font-semibold text-gray-600">
+    <div className="w-full space-y-4">
+      <h2 className="syne text-xl font-semibold tracking-tight">
         {favoritesOnly ? "Favorites" : "All GiftCards"}
-      </h1>
-      <div className="mt-2 flex w-full flex-wrap items-center gap-4 rounded-2xl border-1 border-gray-200 bg-gray-100 p-4">
+      </h2>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {cards
           ? cards
               .filter((card) => card.favorite === favoritesOnly)

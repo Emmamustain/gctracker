@@ -3298,6 +3298,15 @@
         "hash": "sha512-I30RydO+bnn2PQztvo25tswPH+wFBjehVGtmagkU78yMdwTwVf12wnAOF+AeP8S2N8xD+5UPbGhkUfPyvT+mwQ=="
       }
     },
+    "npm:@radix-ui/react-switch": {
+      "type": "npm",
+      "name": "npm:@radix-ui/react-switch",
+      "data": {
+        "version": "1.2.6",
+        "packageName": "@radix-ui/react-switch",
+        "hash": "sha512-bByzr1+ep1zk4VubeEVViV592vu2lHE2BZY5OnzehZqOOgogN80+mNtCqPkhn2gklJqOpxWgPoYTSnhBCqpOXQ=="
+      }
+    },
     "npm:@radix-ui/react-tabs": {
       "type": "npm",
       "name": "npm:@radix-ui/react-tabs",
@@ -8014,6 +8023,15 @@
         "hash": "sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg=="
       }
     },
+    "npm:minidenticons": {
+      "type": "npm",
+      "name": "npm:minidenticons",
+      "data": {
+        "version": "4.2.1",
+        "packageName": "minidenticons",
+        "hash": "sha512-oWfFivA0lOx/V/bO/YIJbthB26lV8JXYvhnv9zM2hNd3fzsHTXQ6c6bWZPcvhD3nnOB+lQk/D9lF43BXixrN8g=="
+      }
+    },
     "npm:minimist": {
       "type": "npm",
       "name": "npm:minimist",
@@ -10289,6 +10307,11 @@
       },
       {
         "source": "frontend",
+        "target": "npm:@radix-ui/react-switch",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
         "target": "npm:@radix-ui/react-tabs",
         "type": "static"
       },
@@ -10330,6 +10353,11 @@
       {
         "source": "frontend",
         "target": "npm:lucide-react",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
+        "target": "npm:minidenticons",
         "type": "static"
       },
       {
@@ -14461,6 +14489,63 @@
       {
         "source": "npm:@radix-ui/react-slot",
         "target": "npm:@radix-ui/react-compose-refs",
+        "type": "static"
+      }
+    ],
+    "npm:@radix-ui/react-switch": [
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@types/react",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@types/react-dom",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:react",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:react-dom",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@radix-ui/primitive",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@radix-ui/react-compose-refs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@radix-ui/react-context",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@radix-ui/react-primitive",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@radix-ui/react-use-controllable-state",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@radix-ui/react-use-previous",
+        "type": "static"
+      },
+      {
+        "source": "npm:@radix-ui/react-switch",
+        "target": "npm:@radix-ui/react-use-size",
         "type": "static"
       }
     ],

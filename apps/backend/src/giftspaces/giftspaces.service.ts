@@ -4,7 +4,7 @@ import { UpdateGiftspaceDto } from './dto/update-giftspace.dto';
 import { DRIZZLE } from '../drizzle/drizzle.module';
 import { DrizzleDB } from '@shared/drizzle';
 import { schema } from '@shared/drizzle';
-import { eq } from '@shared/drizzle/operators';
+import { eq, and, ne } from '@shared/drizzle/operators';
 import * as bcrypt from 'bcrypt';
 import { TGiftspace } from '@shared/types';
 
@@ -52,6 +52,21 @@ export class GiftspacesService {
   }
 
   async findAllShared(userId: string) {
+    // 1. Get IDs of giftspaces that have at least one other person besides the owner
+    // We do this by finding giftspaces where there's a user record that isn't the owner
+    const trulySharedIds = this.db
+      .select({
+        id: schema.giftspacesUsers.giftspaceId,
+      })
+      .from(schema.giftspacesUsers)
+      .innerJoin(
+        schema.giftspaces,
+        eq(schema.giftspacesUsers.giftspaceId, schema.giftspaces.id),
+      )
+      .where(ne(schema.giftspacesUsers.userId, schema.giftspaces.owner))
+      .as('truly_shared_ids');
+
+    // 2. Return the giftspaces for this user that are in that list
     return await this.db
       .select({
         id: schema.giftspaces.id,
@@ -59,12 +74,16 @@ export class GiftspacesService {
         owner: schema.giftspaces.owner,
         createdAt: schema.giftspaces.createdAt,
       })
-      .from(schema.giftspacesUsers)
-      .where(eq(schema.giftspacesUsers.userId, userId))
-      .fullJoin(
-        schema.giftspaces,
-        eq(schema.giftspacesUsers.giftspaceId, schema.giftspaces.id),
-      );
+      .from(schema.giftspaces)
+      .innerJoin(trulySharedIds, eq(schema.giftspaces.id, trulySharedIds.id))
+      .innerJoin(
+        schema.giftspacesUsers,
+        and(
+          eq(schema.giftspacesUsers.giftspaceId, schema.giftspaces.id),
+          eq(schema.giftspacesUsers.userId, userId),
+        ),
+      )
+      .groupBy(schema.giftspaces.id);
   }
 
   async update(id: string, updateGiftspaceDto: UpdateGiftspaceDto) {
@@ -90,6 +109,59 @@ export class GiftspacesService {
       await this.db
         .delete(schema.giftspaces)
         .where(eq(schema.giftspaces.id, id))
+        .returning()
+    )[0];
+  }
+
+  async getGiftspaceUsers(giftspaceId: string) {
+    return await this.db
+      .select({
+        id: schema.users.id,
+        username: schema.users.username,
+        email: schema.users.email,
+      })
+      .from(schema.giftspacesUsers)
+      .innerJoin(
+        schema.users,
+        eq(schema.giftspacesUsers.userId, schema.users.id),
+      )
+      .where(eq(schema.giftspacesUsers.giftspaceId, giftspaceId));
+  }
+
+  async addUserToGiftspace(giftspaceId: string, userId: string) {
+    // Check if user is already in the giftspace
+    const existing = await this.db
+      .select()
+      .from(schema.giftspacesUsers)
+      .where(
+        and(
+          eq(schema.giftspacesUsers.giftspaceId, giftspaceId),
+          eq(schema.giftspacesUsers.userId, userId),
+        ),
+      );
+
+    if (existing.length > 0) {
+      return existing[0];
+    }
+
+    return (
+      await this.db
+        .insert(schema.giftspacesUsers)
+        .values({ giftspaceId, userId })
+        .returning()
+    )[0];
+  }
+
+  async removeUserFromGiftspace(giftspaceId: string, userId: string) {
+    return (
+      await this.db
+        .delete(schema.giftspacesUsers)
+        .where(
+          and(
+            eq(schema.giftspacesUsers.giftspaceId, giftspaceId),
+            eq(schema.giftspacesUsers.userId, userId),
+          ),
+        )
         .returning()
     )[0];
   }

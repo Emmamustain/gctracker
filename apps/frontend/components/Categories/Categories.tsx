@@ -16,7 +16,7 @@ function Categories() {
   const { data: categories } = useQuery({
     queryKey: ["getCategories"],
     queryFn: getCategories,
-  });
+  }) as { data: TCategory[] | undefined };
   return (
     <div className="mt-2 flex w-full flex-wrap items-center gap-4">
       {categories?.map((category) => (

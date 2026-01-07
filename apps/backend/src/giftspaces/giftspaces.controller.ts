@@ -25,11 +25,7 @@ export class GiftspacesController {
     return this.giftspacesService.findAll();
   }
 
-  @Get(':owner')
-  findAllByOwner(@Param('owner') owner: string) {
-    return this.giftspacesService.findAllByOwner(owner);
-  }
-
+  // More specific routes must come before generic ones
   @Get('/shared/:userId')
   findAllShared(@Param('userId') userId: string) {
     return this.giftspacesService.findAllShared(userId);
@@ -38,6 +34,27 @@ export class GiftspacesController {
   @Get('/one/:id')
   findOne(@Param('id') id: string) {
     return this.giftspacesService.findOne(id);
+  }
+
+  @Get(':id/users')
+  getGiftspaceUsers(@Param('id') id: string) {
+    return this.giftspacesService.getGiftspaceUsers(id);
+  }
+
+  @Post(':id/users')
+  addUserToGiftspace(
+    @Param('id') id: string,
+    @Body() body: { userId: string },
+  ) {
+    return this.giftspacesService.addUserToGiftspace(id, body.userId);
+  }
+
+  @Delete(':id/users/:userId')
+  removeUserFromGiftspace(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+  ) {
+    return this.giftspacesService.removeUserFromGiftspace(id, userId);
   }
 
   @Patch(':id')
@@ -51,5 +68,11 @@ export class GiftspacesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.giftspacesService.remove(id);
+  }
+
+  // Generic route must come last
+  @Get(':owner')
+  findAllByOwner(@Param('owner') owner: string) {
+    return this.giftspacesService.findAllByOwner(owner);
   }
 }

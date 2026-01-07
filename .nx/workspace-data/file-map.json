@@ -13,186 +13,83 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "docker-compose.dev.yml",
-        "hash": "4926645847217669030"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "10863184060491050146"
-      },
-      {
         "file": ".dockerignore",
         "hash": "7457224397028210033"
-      },
-      {
-        "file": "scripts/generate-certs.ps1",
-        "hash": "15932620046052413291"
-      },
-      {
-        "file": "Dockerfile.migrator",
-        "hash": "14468224203516358978"
-      },
-      {
-        "file": "docker-compose.prod.yml",
-        "hash": "11787298014033936524"
-      },
-      {
-        "file": "package.json",
-        "hash": "13580117715799117301"
-      },
-      {
-        "file": "Makefile",
-        "hash": "14151608038742998290"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "11674072209577368689"
-      },
-      {
-        "file": "traefik.yml",
-        "hash": "10577251655029807706"
-      },
-      {
-        "file": "README.md",
-        "hash": "1309831674101033352"
-      },
-      {
-        "file": "nx.json",
-        "hash": "8137733918527548803"
-      },
-      {
-        "file": "scripts/set-encoding.ps1",
-        "hash": "6988878390737283264"
       },
       {
         "file": ".gitignore",
         "hash": "6953080631049119133"
       },
       {
+        "file": "Dockerfile.migrator",
+        "hash": "14468224203516358978"
+      },
+      {
         "file": "Dockerfile.watcher",
         "hash": "153792555867859790"
       },
       {
-        "file": "dynamic/tls.yml",
-        "hash": "14799249824448780844"
+        "file": "Makefile",
+        "hash": "14151608038742998290"
+      },
+      {
+        "file": "README.md",
+        "hash": "1309831674101033352"
+      },
+      {
+        "file": "docker-compose.dev.yml",
+        "hash": "4926645847217669030"
+      },
+      {
+        "file": "docker-compose.prod.yml",
+        "hash": "10667408089320966868"
       },
       {
         "file": "dynamic/redirect.yml",
         "hash": "2380035390084817808"
       },
       {
-        "file": "scripts/update-hosts.ps1",
-        "hash": "12259285277355610258"
+        "file": "dynamic/tls.yml",
+        "hash": "14799249824448780844"
+      },
+      {
+        "file": "nx.json",
+        "hash": "8137733918527548803"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "296843763790540681"
+      },
+      {
+        "file": "package.json",
+        "hash": "13580117715799117301"
+      },
+      {
+        "file": "scripts/generate-certs.ps1",
+        "hash": "15932620046052413291"
       },
       {
         "file": "scripts/generate-certs.sh",
         "hash": "3849860937483037028"
+      },
+      {
+        "file": "scripts/set-encoding.ps1",
+        "hash": "6988878390737283264"
+      },
+      {
+        "file": "scripts/update-hosts.ps1",
+        "hash": "12259285277355610258"
+      },
+      {
+        "file": "traefik.yml",
+        "hash": "10577251655029807706"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "10863184060491050146"
       }
     ],
     "projectFileMap": {
-      "@shared/drizzle": [
-        {
-          "file": "packages/shared/drizzle/.env.example",
-          "hash": "5043864854939951379"
-        },
-        {
-          "file": "packages/shared/drizzle/client.ts",
-          "hash": "1298361068750879676"
-        },
-        {
-          "file": "packages/shared/drizzle/db.ts",
-          "hash": "10185994458553862442"
-        },
-        {
-          "file": "packages/shared/drizzle/drizzle.config.ts",
-          "hash": "3324899182488630080"
-        },
-        {
-          "file": "packages/shared/drizzle/drizzle.ts",
-          "hash": "3338724423875483057"
-        },
-        {
-          "file": "packages/shared/drizzle/drizzle/0000_crazy_red_skull.sql",
-          "hash": "15324789547486441618"
-        },
-        {
-          "file": "packages/shared/drizzle/drizzle/0001_slow_bloodstorm.sql",
-          "hash": "7697163406309591338"
-        },
-        {
-          "file": "packages/shared/drizzle/drizzle/meta/0000_snapshot.json",
-          "hash": "11104793073209309606"
-        },
-        {
-          "file": "packages/shared/drizzle/drizzle/meta/0001_snapshot.json",
-          "hash": "11821572085334033463"
-        },
-        {
-          "file": "packages/shared/drizzle/drizzle/meta/_journal.json",
-          "hash": "17845051644917033771"
-        },
-        {
-          "file": "packages/shared/drizzle/index.ts",
-          "hash": "1855272968180708012"
-        },
-        {
-          "file": "packages/shared/drizzle/operators.ts",
-          "hash": "8744584320786689501"
-        },
-        {
-          "file": "packages/shared/drizzle/package.json",
-          "hash": "12438909878143683329",
-          "deps": [
-            "npm:@types/node@22.19.3",
-            "npm:@types/pg",
-            "npm:dotenv",
-            "npm:drizzle-kit",
-            "npm:drizzle-orm",
-            "npm:next",
-            "npm:pg"
-          ]
-        },
-        {
-          "file": "packages/shared/drizzle/project.json",
-          "hash": "12480748798857490099"
-        },
-        {
-          "file": "packages/shared/drizzle/schema/brands.ts",
-          "hash": "16770098836786296748"
-        },
-        {
-          "file": "packages/shared/drizzle/schema/categories.ts",
-          "hash": "14138646571233124918"
-        },
-        {
-          "file": "packages/shared/drizzle/schema/giftcards.ts",
-          "hash": "18239127713809475606"
-        },
-        {
-          "file": "packages/shared/drizzle/schema/giftspaces.ts",
-          "hash": "10899759485550691919"
-        },
-        {
-          "file": "packages/shared/drizzle/schema/index.ts",
-          "hash": "1586201973362760056"
-        },
-        {
-          "file": "packages/shared/drizzle/schema/relations.ts",
-          "hash": "9262602911025155487"
-        },
-        {
-          "file": "packages/shared/drizzle/schema/users.ts",
-          "hash": "9960907305355788142"
-        },
-        {
-          "file": "packages/shared/drizzle/seed.ts",
-          "hash": "3902730420124229387"
-        },
-        {
-          "file": "packages/shared/drizzle/tsconfig.json",
-          "hash": "5338766698246301034"
-        }
-      ],
       "frontend": [
         {
           "file": "apps/frontend/.gitignore",
@@ -220,11 +117,11 @@
         },
         {
           "file": "apps/frontend/app/(authenticated)/card/[cardId]/page.tsx",
-          "hash": "5257900551539462237"
+          "hash": "16227800912304035116"
         },
         {
           "file": "apps/frontend/app/(authenticated)/giftspace/[giftspace_id]/page.tsx",
-          "hash": "12971697358054039461"
+          "hash": "9004405075420002494"
         },
         {
           "file": "apps/frontend/app/(authenticated)/layout.tsx",
@@ -235,16 +132,20 @@
           "hash": "13898759094641964242"
         },
         {
+          "file": "apps/frontend/app/(authenticated)/settings/page.tsx",
+          "hash": "15805408932203001442"
+        },
+        {
           "file": "apps/frontend/app/favicon.ico",
           "hash": "9157999678830540297"
         },
         {
           "file": "apps/frontend/app/globals.css",
-          "hash": "13740108335908276006"
+          "hash": "12297439900886209794"
         },
         {
           "file": "apps/frontend/app/layout.tsx",
-          "hash": "16364916495611543559"
+          "hash": "11787702062739699263"
         },
         {
           "file": "apps/frontend/app/login/page.tsx",
@@ -255,12 +156,16 @@
           "hash": "16244492343720945309"
         },
         {
+          "file": "apps/frontend/apps/frontend/package-lock.json",
+          "hash": "6642967134755383692"
+        },
+        {
           "file": "apps/frontend/components.json",
           "hash": "243132131643404497"
         },
         {
           "file": "apps/frontend/components/AddCardModal/AddCardModal.tsx",
-          "hash": "2845979265550306454"
+          "hash": "677784748714380069"
         },
         {
           "file": "apps/frontend/components/AddGiftspaceModal/AddGiftspaceModal.tsx",
@@ -268,19 +173,19 @@
         },
         {
           "file": "apps/frontend/components/BarCodeScanner/BarCodeScanner.jsx",
-          "hash": "6311221090688910751"
+          "hash": "12294847978211257079"
         },
         {
           "file": "apps/frontend/components/Card/Card.tsx",
-          "hash": "17826002322172994804"
+          "hash": "10398057587433019288"
         },
         {
           "file": "apps/frontend/components/Cards/Cards.tsx",
-          "hash": "14667776784315377902"
+          "hash": "6820653263456869051"
         },
         {
           "file": "apps/frontend/components/Categories/Categories.tsx",
-          "hash": "13618438421451606626"
+          "hash": "12352793063329238646"
         },
         {
           "file": "apps/frontend/components/Category/Category.jsx",
@@ -299,20 +204,20 @@
           "hash": "17836748491757918897"
         },
         {
-          "file": "apps/frontend/components/Header/Header.css",
-          "hash": "12898839704137005682"
+          "file": "apps/frontend/components/GiftspaceSettingsModal/GiftspaceSettingsModal.tsx",
+          "hash": "4721068106885964433"
         },
         {
           "file": "apps/frontend/components/Header/Header.tsx",
-          "hash": "1121031580871936457"
+          "hash": "16425777252208818200"
         },
         {
           "file": "apps/frontend/components/ProfileDropdown/ProfileDropdown.tsx",
-          "hash": "13548422198706033153"
+          "hash": "1569663019513158127"
         },
         {
           "file": "apps/frontend/components/SearchBar/SearchBar.jsx",
-          "hash": "3375724909053224959"
+          "hash": "5437672889784986303"
         },
         {
           "file": "apps/frontend/components/UpdateCardModal/UpdateCardModal.jsx",
@@ -336,7 +241,7 @@
         },
         {
           "file": "apps/frontend/components/ui/dialog.tsx",
-          "hash": "13796260047059905954"
+          "hash": "12809447483075819414"
         },
         {
           "file": "apps/frontend/components/ui/dropdown-menu.tsx",
@@ -351,8 +256,16 @@
           "hash": "3461372965287994539"
         },
         {
+          "file": "apps/frontend/components/ui/select.tsx",
+          "hash": "10632330164276573365"
+        },
+        {
           "file": "apps/frontend/components/ui/sonner.tsx",
           "hash": "16017092066728996897"
+        },
+        {
+          "file": "apps/frontend/components/ui/switch.tsx",
+          "hash": "3146854899890256619"
         },
         {
           "file": "apps/frontend/data/brands.js",
@@ -376,7 +289,7 @@
         },
         {
           "file": "apps/frontend/package.json",
-          "hash": "12246113184199906383",
+          "hash": "13294979559862655595",
           "deps": [
             "npm:@types/node@20.19.27",
             "npm:@types/react",
@@ -393,6 +306,7 @@
             "npm:@radix-ui/react-label",
             "npm:@radix-ui/react-select",
             "npm:@radix-ui/react-slot",
+            "npm:@radix-ui/react-switch",
             "npm:@radix-ui/react-tabs",
             "npm:@radix-ui/react-tooltip",
             "@shared/types",
@@ -402,6 +316,7 @@
             "npm:class-variance-authority",
             "npm:clsx",
             "npm:lucide-react",
+            "npm:minidenticons",
             "npm:motion",
             "npm:next",
             "npm:next-themes",
@@ -535,6 +450,154 @@
           "hash": "6910241955211562511"
         }
       ],
+      "@shared/drizzle": [
+        {
+          "file": "packages/shared/drizzle/.env.example",
+          "hash": "5043864854939951379"
+        },
+        {
+          "file": "packages/shared/drizzle/client.ts",
+          "hash": "1298361068750879676"
+        },
+        {
+          "file": "packages/shared/drizzle/db.ts",
+          "hash": "10185994458553862442"
+        },
+        {
+          "file": "packages/shared/drizzle/drizzle.config.ts",
+          "hash": "3324899182488630080"
+        },
+        {
+          "file": "packages/shared/drizzle/drizzle.ts",
+          "hash": "3338724423875483057"
+        },
+        {
+          "file": "packages/shared/drizzle/drizzle/0000_crazy_red_skull.sql",
+          "hash": "15324789547486441618"
+        },
+        {
+          "file": "packages/shared/drizzle/drizzle/0001_slow_bloodstorm.sql",
+          "hash": "7697163406309591338"
+        },
+        {
+          "file": "packages/shared/drizzle/drizzle/meta/0000_snapshot.json",
+          "hash": "11104793073209309606"
+        },
+        {
+          "file": "packages/shared/drizzle/drizzle/meta/0001_snapshot.json",
+          "hash": "11821572085334033463"
+        },
+        {
+          "file": "packages/shared/drizzle/drizzle/meta/_journal.json",
+          "hash": "17845051644917033771"
+        },
+        {
+          "file": "packages/shared/drizzle/index.ts",
+          "hash": "1855272968180708012"
+        },
+        {
+          "file": "packages/shared/drizzle/operators.ts",
+          "hash": "8744584320786689501"
+        },
+        {
+          "file": "packages/shared/drizzle/package.json",
+          "hash": "12438909878143683329",
+          "deps": [
+            "npm:@types/node@22.19.3",
+            "npm:@types/pg",
+            "npm:dotenv",
+            "npm:drizzle-kit",
+            "npm:drizzle-orm",
+            "npm:next",
+            "npm:pg"
+          ]
+        },
+        {
+          "file": "packages/shared/drizzle/project.json",
+          "hash": "12480748798857490099"
+        },
+        {
+          "file": "packages/shared/drizzle/schema/brands.ts",
+          "hash": "16770098836786296748"
+        },
+        {
+          "file": "packages/shared/drizzle/schema/categories.ts",
+          "hash": "14138646571233124918"
+        },
+        {
+          "file": "packages/shared/drizzle/schema/giftcards.ts",
+          "hash": "18239127713809475606"
+        },
+        {
+          "file": "packages/shared/drizzle/schema/giftspaces.ts",
+          "hash": "10899759485550691919"
+        },
+        {
+          "file": "packages/shared/drizzle/schema/index.ts",
+          "hash": "1586201973362760056"
+        },
+        {
+          "file": "packages/shared/drizzle/schema/relations.ts",
+          "hash": "9262602911025155487"
+        },
+        {
+          "file": "packages/shared/drizzle/schema/users.ts",
+          "hash": "9960907305355788142"
+        },
+        {
+          "file": "packages/shared/drizzle/seed.ts",
+          "hash": "3902730420124229387"
+        },
+        {
+          "file": "packages/shared/drizzle/tsconfig.json",
+          "hash": "5338766698246301034"
+        }
+      ],
+      "@shared/types": [
+        {
+          "file": "packages/shared/types/package.json",
+          "hash": "11337852605469860744",
+          "deps": [
+            "@shared/drizzle"
+          ]
+        },
+        {
+          "file": "packages/shared/types/project.json",
+          "hash": "15175134259409114594"
+        },
+        {
+          "file": "packages/shared/types/src/brands/brands.types.ts",
+          "hash": "15300377524785620721"
+        },
+        {
+          "file": "packages/shared/types/src/categories/categories.types.ts",
+          "hash": "4189259169814004751"
+        },
+        {
+          "file": "packages/shared/types/src/generics/generics.types.ts",
+          "hash": "10757906366497597120"
+        },
+        {
+          "file": "packages/shared/types/src/giftcards/giftcards.types.ts",
+          "hash": "13782901079122657502"
+        },
+        {
+          "file": "packages/shared/types/src/giftspaces/giftspaces.types.ts",
+          "hash": "5512343685408171921"
+        },
+        {
+          "file": "packages/shared/types/src/index.ts",
+          "hash": "5368420337952265075"
+        },
+        {
+          "file": "packages/shared/types/src/users/users.types.ts",
+          "hash": "10668321322074056434"
+        },
+        {
+          "file": "packages/shared/types/tsconfig.json",
+          "hash": "4938146016893260984"
+        }
+      ],
       "backend": [
         {
           "file": "apps/backend/.env.example",
@@ -558,7 +621,7 @@
         },
         {
           "file": "apps/backend/Dockerfile.prod",
-          "hash": "2652329689749586467"
+          "hash": "4977450189127505076"
         },
         {
           "file": "apps/backend/README.md",
@@ -647,11 +710,11 @@
         },
         {
           "file": "apps/backend/src/auth/auth.controller.ts",
-          "hash": "4791335337121238771"
+          "hash": "18216848259970806910"
         },
         {
           "file": "apps/backend/src/auth/auth.module.ts",
-          "hash": "14357834744061860471"
+          "hash": "5304609633000235154"
         },
         {
           "file": "apps/backend/src/auth/auth.service.ts",
@@ -779,7 +842,7 @@
         },
         {
           "file": "apps/backend/src/giftspaces/giftspaces.controller.ts",
-          "hash": "11344602596471711968"
+          "hash": "15423181177092796479"
         },
         {
           "file": "apps/backend/src/giftspaces/giftspaces.module.ts",
@@ -791,7 +854,7 @@
         },
         {
           "file": "apps/backend/src/giftspaces/giftspaces.service.ts",
-          "hash": "7031209687542925207"
+          "hash": "641263605093666001"
         },
         {
           "file": "apps/backend/src/main.ts",
@@ -840,51 +903,6 @@
         {
           "file": "apps/backend/tsconfig.json",
           "hash": "12779907316229989218"
-        }
-      ],
-      "@shared/types": [
-        {
-          "file": "packages/shared/types/package.json",
-          "hash": "11337852605469860744",
-          "deps": [
-            "@shared/drizzle"
-          ]
-        },
-        {
-          "file": "packages/shared/types/project.json",
-          "hash": "15175134259409114594"
-        },
-        {
-          "file": "packages/shared/types/src/brands/brands.types.ts",
-          "hash": "15300377524785620721"
-        },
-        {
-          "file": "packages/shared/types/src/categories/categories.types.ts",
-          "hash": "4189259169814004751"
-        },
-        {
-          "file": "packages/shared/types/src/generics/generics.types.ts",
-          "hash": "10757906366497597120"
-        },
-        {
-          "file": "packages/shared/types/src/giftcards/giftcards.types.ts",
-          "hash": "13782901079122657502"
-        },
-        {
-          "file": "packages/shared/types/src/giftspaces/giftspaces.types.ts",
-          "hash": "5512343685408171921"
-        },
-        {
-          "file": "packages/shared/types/src/index.ts",
-          "hash": "5368420337952265075"
-        },
-        {
-          "file": "packages/shared/types/src/users/users.types.ts",
-          "hash": "10668321322074056434"
-        },
-        {
-          "file": "packages/shared/types/tsconfig.json",
-          "hash": "4938146016893260984"
         }
       ]
     }

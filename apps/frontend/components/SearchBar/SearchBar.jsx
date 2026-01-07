@@ -4,6 +4,8 @@ import { Search } from "lucide-react";
 import React from "react";
 import { useState } from "react";
 import useCardStore from "@/hook/useCardsStore";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 function SearchBar() {
   const [inputValue, setInputValue] = useState("");
@@ -20,65 +22,66 @@ function SearchBar() {
   };
 
   return (
-    <div className="mt-5 flex w-full items-center justify-center">
+    <div className="flex w-full items-center justify-center gap-2">
       {isOpen ? (
         <div
-          className="absolute inset-0 bg-black/10"
+          className="fixed inset-0 z-40 bg-background/20 backdrop-blur-sm"
           onClick={() => {
             closeDropDown();
           }}
         ></div>
       ) : null}
 
-      <div className="relative mr-1 w-full max-w-[600px]">
-        <input
-          type="text"
-          className="h-10 w-full rounded-3xl border-1 border-gray-400 pl-10"
-          placeholder="Search ..."
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-        />
-        <Search className="absolute bottom-2 left-2" color="gray" />
-        <div
-          className={`${
-            isOpen ? "block" : "hidden"
-          } absolute top-11 z-10 w-full max-w-[570px] rounded-md bg-white shadow-lg`}
-          role="search"
-        >
-          {/* ... Dropdown items ... */}
-          <div className="py-1" role="none ">
-            {searchResults.length > 0 ? (
-              searchResults.map((searchResult) => (
-                <a
-                  href={`/card/${searchResult.id}`}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="searchCard"
-                  key={searchResult.id}
-                >
-                  {searchResult.name}
-                </a>
-              ))
-            ) : (
-              <p className="pl-6 text-sm text-gray-700">
-                There is no card with this name or brand{" "}
-              </p>
-            )}
-          </div>
+      <div className="relative z-50 w-full max-w-[600px]">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="text"
+            className="h-10 w-full rounded-full pl-10"
+            placeholder="Search gift cards..."
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+            }}
+          />
         </div>
+        
+        {isOpen && (
+          <div
+            className="absolute top-12 z-50 w-full overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-md animate-in fade-in zoom-in-95"
+            role="search"
+          >
+            <div className="py-2">
+              {searchResults.length > 0 ? (
+                searchResults.map((searchResult) => (
+                  <a
+                    href={`/card/${searchResult.id}`}
+                    className="block px-4 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                    role="searchCard"
+                    key={searchResult.id}
+                  >
+                    {searchResult.name}
+                  </a>
+                ))
+              ) : (
+                <p className="px-4 py-2 text-sm text-muted-foreground">
+                  No gift cards found with that name
+                </p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
-      <button
+      <Button
         onClick={() => {
           toggleDropdown();
           const results = searchCards(inputValue);
           setSearchResults(results);
-          console.log(searchCards(inputValue));
         }}
-        className="z-10 h-10 w-fit rounded-3xl border-1 border-blue-700 bg-blue-600 px-3 text-amber-50 hover:cursor-pointer hover:border-blue-500 hover:bg-blue-500"
+        className="z-50 rounded-full"
       >
         Search
-      </button>
+      </Button>
     </div>
   );
 }

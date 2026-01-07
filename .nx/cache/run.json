@@ -1,8 +1,8 @@
 {
   "run": {
-    "command": "nx build @shared/drizzle",
-    "startTime": "2026-01-04T20:57:15.957Z",
-    "endTime": "2026-01-04T20:57:17.551Z",
+    "command": "nx run-many -t build --projects=@shared/drizzle,@shared/types",
+    "startTime": "2026-01-07T01:08:21.788Z",
+    "endTime": "2026-01-07T01:08:24.552Z",
     "inner": false
   },
   "tasks": [
@@ -10,9 +10,20 @@
       "taskId": "@shared/drizzle:build",
       "target": "build",
       "projectName": "@shared/drizzle",
-      "hash": "5840723077642611379",
-      "startTime": "2026-01-04T20:57:15.964Z",
-      "endTime": "2026-01-04T20:57:17.550Z",
+      "hash": "16350675525814847180",
+      "startTime": "2026-01-07T01:08:21.796Z",
+      "endTime": "2026-01-07T01:08:22.891Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "@shared/types:build",
+      "target": "build",
+      "projectName": "@shared/types",
+      "hash": "6091526267480571987",
+      "startTime": "2026-01-07T01:08:22.894Z",
+      "endTime": "2026-01-07T01:08:24.551Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

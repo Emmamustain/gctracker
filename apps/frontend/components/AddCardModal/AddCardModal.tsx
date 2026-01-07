@@ -1,13 +1,31 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { PlusCircle, CreditCard } from "lucide-react";
+import { PlusCircle, CreditCard, Plus } from "lucide-react";
 import { useState } from "react";
 import BarCodeScanner from "@/components/BarCodeScanner/BarCodeScanner";
 import { TBrand, TCreateGiftcard, TGiftspace } from "@shared/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "@/stores/user.store";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function AddCardModal() {
   const [name, setName] = useState("");
@@ -20,8 +38,7 @@ function AddCardModal() {
   const queryClient = useQueryClient();
   const { user } = useUserStore();
 
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
+  const resetForm = () => {
     setBalance("");
     setBarCode("");
     setName("");
@@ -29,7 +46,6 @@ function AddCardModal() {
     setBrand("none");
     setGiftspace("none");
   };
-  console.log({ brand });
 
   async function getBrands(): Promise<TBrand[]> {
     const response = await fetch(
@@ -42,8 +58,7 @@ function AddCardModal() {
     queryFn: getBrands,
   });
 
-  const selectedBrand = brands?.find((v) => v.id === brand);
-  console.log({ selectedBrand });
+  const selectedBrand = brands?.find((v: TBrand) => v.id === brand);
 
   async function getGiftspaces(): Promise<TGiftspace[]> {
     if (!user) return [];
@@ -58,6 +73,12 @@ function AddCardModal() {
     queryFn: getGiftspaces,
     enabled: Boolean(user),
   });
+
+  useEffect(() => {
+    if (giftspaces && giftspaces.length > 0 && giftspace === "none") {
+      setGiftspace(giftspaces[0].id);
+    }
+  }, [giftspaces]);
 
   const createGiftcard = useMutation({
     mutationFn: ({
@@ -77,162 +98,153 @@ function AddCardModal() {
       });
     },
     onSuccess: async () => {
-      // If you're invalidating a single query
       await queryClient.invalidateQueries({ queryKey: ["getGiftcards"] });
+      setIsOpen(false);
+      resetForm();
+      toast.success("Giftcard Created", {
+        description: "Your giftcard has been created successfully!",
+      });
     },
   });
 
   return (
-    <div>
-      <div className="flex justify-self-end px-6" onClick={toggleModal}>
-        <button className="flex cursor-pointer items-center rounded-lg bg-black px-3 py-2 font-medium text-amber-50 hover:bg-gray-700">
-          <PlusCircle size={21} />
-        </button>
-      </div>
-      {isOpen && (
-        <div className="absolute top-1/2 left-1/2 z-50 flex h-fit min-h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-between rounded-2xl bg-gray-50 p-6">
-          <div className="flex h-fit w-full flex-col items-center gap-1 rounded-lg">
-            <div className="flex h-fit w-fit justify-center rounded-4xl bg-black p-2">
-              <CreditCard color="white" size={20} />{" "}
-            </div>
-            <h1 className="pt-1 font-semibold text-gray-800"> Add New Card</h1>
-            <p className="px-10 text-sm font-light text-gray-500">
-              Add your gift card details here and
-              <br />
-              <span className="block text-center">track your balance</span>
-            </p>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button size="icon" className="rounded-full">
+          <Plus className="h-5 w-5" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <div className="bg-primary/10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
+            <CreditCard className="text-primary h-6 w-6" />
           </div>
-          <div className="mt-2 flex h-[200px] w-full items-center justify-center overflow-hidden rounded-lg bg-gray-200">
+          <DialogTitle className="text-center text-xl">
+            Add New Card
+          </DialogTitle>
+          <DialogDescription className="text-center">
+            Add your gift card details here and track your balance.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="grid gap-4 py-4">
+          <div className="bg-muted flex h-[160px] w-full items-center justify-center overflow-hidden rounded-lg">
             {barCode === "" && <BarCodeScanner setBarCode={setBarCode} />}
             {selectedBrand && barCode !== "" ? (
               <img
                 src={selectedBrand.imageUrl ?? ""}
                 alt=""
-                className="h-full w-full bg-gray-50 object-contain"
+                className="h-full w-full object-contain p-4"
               />
             ) : null}
           </div>
-          <div className="mt-4 flex h-fit w-full flex-col gap-2 rounded-lg">
-            <label className="pl-2 font-normal text-gray-600">
-              Select your gift Card brand
-            </label>
-            <select
-              className="rounded-xl border-1 border-gray-300 px-3 py-2"
-              name="Selectedbrand"
-              value={brand}
-              onChange={(e) => {
-                setBrand(e.target.value);
-              }}
-            >
-              <option value="none" disabled>
-                Select a brand
-              </option>
 
-              {brands?.map((brand) => (
-                <option key={brand.id} value={brand.id}>
-                  {brand.name}
-                </option>
-              ))}
-            </select>
+          <div className="flex w-full items-end gap-4">
+            <div className="grid flex-1 gap-2">
+              <Label htmlFor="brand">Brand</Label>
+              <Select value={brand} onValueChange={setBrand}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Brand" />
+                </SelectTrigger>
+                <SelectContent>
+                  {brands?.map((b: TBrand) => (
+                    <SelectItem key={b.id} value={b.id}>
+                      {b.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-            <label className="pl-2 font-normal text-gray-600">
-              Select your giftspace
-            </label>
-            <select
-              className="rounded-xl border-1 border-gray-300 px-3 py-2"
-              name="SelectedCard"
-              value={giftspace}
-              onChange={(e) => {
-                setGiftspace(e.target.value);
-              }}
-            >
-              <option value="none" disabled>
-                Select a giftspace
-              </option>
-
-              {giftspaces?.map((giftspace) => (
-                <option key={giftspace.id} value={giftspace.id}>
-                  {giftspace.name}
-                </option>
-              ))}
-            </select>
-            <label className="pl-2 font-normal text-gray-600">
-              Enter the name of your card
-            </label>
-            <input
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              type="text"
-              className="h-10 w-full rounded-xl border-1 border-gray-300 pl-3"
-              placeholder="ex : HEMA"
-            />
-            <label className="pl-2 font-normal text-gray-600">
-              Enter the code
-            </label>
-            <input
-              value={barCode}
-              onChange={(e) => {
-                setBarCode(e.target.value);
-              }}
-              type="text"
-              className="h-10 w-full rounded-xl border-1 border-gray-300 pl-3"
-              placeholder="ex: 12345678"
-            />
-            <label className="pl-2 font-normal text-gray-600">
-              Enter the PIN
-            </label>
-            <input
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              type="number"
-              className="h-10 w-full rounded-xl border-1 border-gray-300 pl-3"
-              placeholder="ex : 1234"
-            />
-            <label className="pl-2 font-normal text-gray-600">
-              Enter the Balance
-            </label>
-            <input
-              value={balance}
-              onChange={(e) => setBalance(e.target.value)}
-              type="number"
-              className="h-10 w-full rounded-xl border-1 border-gray-300 pl-3"
-              placeholder="ex : 30.7$"
-            />
+            <div className="grid flex-1 gap-2">
+              <Label htmlFor="giftspace">Giftspace</Label>
+              <Select value={giftspace} onValueChange={setGiftspace}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Giftspace" />
+                </SelectTrigger>
+                <SelectContent>
+                  {giftspaces?.map((gs: TGiftspace) => (
+                    <SelectItem key={gs.id} value={gs.id}>
+                      {gs.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
-          <div className="mt-6 flex h-fit w-full justify-between gap-2 rounded-lg p-2">
-            <button
-              className="flex h-10 w-fit cursor-pointer items-center rounded-lg border-1 border-gray-400 px-3 py-2 font-medium text-gray-600 hover:cursor-pointer hover:bg-gray-200"
-              onClick={toggleModal}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                createGiftcard.mutate({
-                  brand,
-                  code: barCode,
-                  pin,
-                  balance: balance.trim() === "" ? "-1" : balance,
-                  giftspace,
-                  name,
-                  favorite: false,
-                });
-                toggleModal();
-                toast.success("Giftcard Created", {
-                  description: "Your giftcard has been created successfully!",
-                });
-              }}
-              className="flex h-10 w-fit items-center rounded-lg border-1 border-blue-700 bg-blue-600 px-3 py-2 font-medium text-amber-50 hover:cursor-pointer hover:border-blue-500 hover:bg-blue-500"
-            >
-              Add card
-            </button>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Card Name</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="ex: My HEMA Card"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="balance">Balance</Label>
+              <Input
+                id="balance"
+                type="number"
+                value={balance}
+                onChange={(e) => setBalance(e.target.value)}
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="code">Card Code</Label>
+              <Input
+                id="code"
+                value={barCode}
+                onChange={(e) => setBarCode(e.target.value)}
+                placeholder="12345678"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="pin">PIN</Label>
+              <Input
+                id="pin"
+                type="password"
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                placeholder="****"
+              />
+            </div>
           </div>
         </div>
-      )}
-    </div>
+
+        <div className="flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setIsOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              createGiftcard.mutate({
+                brand,
+                code: barCode,
+                pin,
+                balance: balance.trim() === "" ? "-1" : balance,
+                giftspace,
+                name,
+                favorite: false,
+              });
+            }}
+            disabled={
+              createGiftcard.isPending ||
+              brand === "none" ||
+              giftspace === "none"
+            }
+          >
+            {createGiftcard.isPending ? "Adding..." : "Add Card"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

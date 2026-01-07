@@ -35,7 +35,7 @@ function CardPage() {
     queryFn: getBrands,
   });
 
-  const selectedBrand = brands?.find((v) => v.id === giftcard?.brand);
+  const selectedBrand = brands?.find((v: TBrand) => v.id === giftcard?.brand);
   const codeCopied = giftcard?.code;
 
   async function copyToClipBoard(copyCode: string) {
