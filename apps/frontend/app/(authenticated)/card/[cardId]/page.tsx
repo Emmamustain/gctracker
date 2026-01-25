@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import UpdateCardModal from "@/components/UpdateCardModal/UpdateCardModal";
+import Barcode from "react-barcode";
 
 function CardPage() {
   const params = useParams();
@@ -144,11 +145,25 @@ function CardPage() {
 
         <Separator />
 
-        {/* Barcode Section */}
+        {/* Barcode & Pin Section */}
         <div className="bg-background flex flex-col items-center justify-center space-y-8 p-10">
-          <div className="border-muted-foreground/20 hover:border-primary/20 flex w-full flex-col items-center justify-center space-y-4 rounded-2xl border-2 border-dashed p-8 transition-colors">
-            <div className="libre-barcode-128 text-foreground flex h-24 items-center justify-center text-[80px] leading-none select-none">
-              {giftcard.code}
+          <div className="border-muted-foreground/20 hover:border-primary/20 flex w-full flex-col items-center justify-center space-y-4 rounded-2xl border-2 border-dashed p-8 transition-colors overflow-hidden relative">
+            {giftcard.pin && (
+              <div className="absolute top-4 right-4 flex flex-col items-end">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">PIN Code</p>
+                <p className="font-mono text-lg font-bold text-primary tracking-widest">{giftcard.pin}</p>
+              </div>
+            )}
+            <div className="bg-white p-4 rounded-lg">
+              <Barcode 
+                value={giftcard.code} 
+                format="CODE128"
+                width={2}
+                height={80}
+                displayValue={false}
+                background="transparent"
+                lineColor="#000000"
+              />
             </div>
             <p className="text-muted-foreground font-mono text-sm tracking-[0.2em] uppercase">
               {giftcard.code}

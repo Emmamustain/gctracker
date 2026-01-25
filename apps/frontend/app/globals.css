@@ -130,6 +130,8 @@
   }
   .libre-barcode-128 {
     font-family: var(--font-libre-barcode-128), sans-serif;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
   }
 }
 
