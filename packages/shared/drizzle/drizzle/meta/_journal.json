@@ -15,6 +15,20 @@
       "when": 1767557237611,
       "tag": "0001_slow_bloodstorm",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770855974260,
+      "tag": "0002_talented_venom",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1770856666638,
+      "tag": "0003_slim_thunderball",
+      "breakpoints": true
     }
   ]
 }

@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import UpdateCardModal from "@/components/UpdateCardModal/UpdateCardModal";
+import AddTransactionModal from "@/components/AddTransactionModal/AddTransactionModal";
+import TransactionHistory from "@/components/TransactionHistory/TransactionHistory";
 import Barcode from "react-barcode";
 
 function CardPage() {
@@ -147,18 +149,22 @@ function CardPage() {
 
         {/* Barcode & Pin Section */}
         <div className="bg-background flex flex-col items-center justify-center space-y-8 p-10">
-          <div className="border-muted-foreground/20 hover:border-primary/20 flex w-full flex-col items-center justify-center space-y-4 rounded-2xl border-2 border-dashed p-8 transition-colors overflow-hidden relative">
+          <div className="border-muted-foreground/20 hover:border-primary/20 relative flex w-full flex-col items-center justify-center space-y-4 overflow-hidden rounded-2xl border-2 border-dashed p-8 transition-colors">
             {giftcard.pin && (
               <div className="absolute top-4 right-4 flex flex-col items-end">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">PIN Code</p>
-                <p className="font-mono text-lg font-bold text-primary tracking-widest">{giftcard.pin}</p>
+                <p className="text-muted-foreground/60 text-[10px] font-bold tracking-widest uppercase">
+                  PIN Code
+                </p>
+                <p className="text-primary font-mono text-lg font-bold tracking-widest">
+                  {giftcard.pin}
+                </p>
               </div>
             )}
-            <div className="bg-white p-4 rounded-lg">
-              <Barcode 
-                value={giftcard.code} 
+            <div className="rounded-lg bg-white p-4">
+              <Barcode
+                value={giftcard.code}
                 format="CODE128"
-                width={2}
+                width={1.7}
                 height={80}
                 displayValue={false}
                 background="transparent"
@@ -179,12 +185,22 @@ function CardPage() {
           </Button>
         </div>
 
+        <Separator />
+
+        {/* Transaction Section */}
+        <div className="bg-background flex flex-col space-y-4 p-6">
+          <div className="flex items-center justify-between">
+            <div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+              <HistoryIcon size={16} />
+              Transaction History
+            </div>
+            <AddTransactionModal giftcard={giftcard} />
+          </div>
+          <TransactionHistory giftcardId={cardId} />
+        </div>
+
         {/* Footer info */}
         <div className="bg-muted/30 flex items-center justify-between border-t px-8 py-4">
-          <div className="text-muted-foreground hover:text-foreground flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors">
-            <HistoryIcon size={16} />
-            Transaction History
-          </div>
           <div className="text-muted-foreground flex items-center gap-2 text-xs">
             <CreditCard size={14} />
             Gift Card

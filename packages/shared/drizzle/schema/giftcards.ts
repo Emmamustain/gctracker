@@ -20,6 +20,7 @@ export const giftcards = pgTable("giftcards", {
   pin: varchar("pin", { length: 255 }),
   balance: decimal("balance"),
   favorite: boolean("favorite").default(false),
+  discarded: boolean("discarded").default(false),
   giftspace: uuid("giftspace")
     .notNull()
     .references(() => giftspaces.id),

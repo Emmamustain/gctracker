@@ -16,7 +16,7 @@ ifeq ($(OS),Windows_NT)
 	@powershell -ExecutionPolicy Bypass -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; .\scripts\set-encoding.ps1"
 endif
 	@echo $(HR)
-	@echo 🚀 Setting up Next-Nest Monorepo Project...
+	@echo 🚀 Setting up GC Tracker Monorepo Project...
 	@echo $(HR)
 	@echo 📦 Installing dependencies...
 	npm install
@@ -153,7 +153,7 @@ ifeq ($(OS),Windows_NT)
 	@powershell -ExecutionPolicy Bypass -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; .\scripts\set-encoding.ps1"
 endif
 	@echo $(HR)
-	@echo 🛠️  Dotfiles Market Commands
+	@echo 🛠️  GC Tracker Commands
 	@echo $(HR)
 	@echo "--- Setup ---"
 	@echo "make setup          - Run this first to install dependencies and generate certs"

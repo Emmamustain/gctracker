@@ -5,10 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
 interface CardProps {
-  favoritesOnly: boolean;
+  favoritesOnly?: boolean;
+  discardedOnly?: boolean;
 }
 
-function Cards({ favoritesOnly }: CardProps) {
+function Cards({ favoritesOnly = false, discardedOnly = false }: CardProps) {
   const params = useParams();
   const giftspaceId = params["giftspace_id"];
 
@@ -47,31 +48,35 @@ function Cards({ favoritesOnly }: CardProps) {
   }) as { data: TGiftcard[] | undefined };
   console.log({ cards });
 
-  const hasCards =
-    cards && cards.some((card) => card.favorite === favoritesOnly);
+  let filteredCards = cards || [];
+  let title = "All GiftCards";
 
-  if (!hasCards) return;
+  if (favoritesOnly) {
+    filteredCards = cards?.filter((card) => card.favorite === true) || [];
+    title = "Favorites";
+  } else if (discardedOnly) {
+    filteredCards = cards?.filter((card) => card.discarded === true) || [];
+    title = "Discarded Cards";
+  } else {
+    filteredCards = cards?.filter((card) => card.discarded !== true) || [];
+    title = "Active GiftCards";
+  }
+
+  if (!filteredCards.length) return null;
 
   return (
     <div className="w-full space-y-4">
-      <h2 className="syne text-xl font-semibold tracking-tight">
-        {favoritesOnly ? "Favorites" : "All GiftCards"}
-      </h2>
+      <h2 className="syne text-xl font-semibold tracking-tight">{title}</h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {cards
-          ? cards
-              .filter((card) => card.favorite === favoritesOnly)
-              .map((card) => (
-                <Card
-                  key={card.id}
-                  logo={
-                    brands?.find((v) => v.id === card.brand)?.imageUrl ?? ""
-                  }
-                  id={card.id}
-                  favorite={card.favorite}
-                />
-              ))
-          : null}
+        {filteredCards.map((card) => (
+          <Card
+            key={card.id}
+            logo={brands?.find((v) => v.id === card.brand)?.imageUrl ?? ""}
+            id={card.id}
+            favorite={card.favorite}
+            discarded={card.discarded}
+          />
+        ))}
       </div>
     </div>
   );

@@ -12,6 +12,10 @@ pnpm-lock.yaml
 /packages/shared/types/tsconfig.tsbuildinfo
 /packages/shared/drizzle/tsconfig.tsbuildinfo
 
+# NX
+.nx/cache
+.nx/workspace-data
+
 # Logs
 logs
 *.log

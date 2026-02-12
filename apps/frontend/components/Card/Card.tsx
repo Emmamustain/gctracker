@@ -4,9 +4,11 @@ import { TGiftcard, TUpdateCard } from "@shared/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/utils/clsx";
 
-type CardProps = Pick<TGiftcard, "favorite" | "id"> & { logo?: string };
+type CardProps = Pick<TGiftcard, "favorite" | "id" | "discarded"> & {
+  logo?: string;
+};
 
-function Card({ favorite, id, logo }: CardProps) {
+function Card({ favorite, id, logo, discarded = false }: CardProps) {
   const queryClient = useQueryClient();
 
   const updateFavorite = useMutation({
@@ -28,20 +30,25 @@ function Card({ favorite, id, logo }: CardProps) {
     <a
       key={id}
       href={`/card/${id}`}
-      className="group relative flex flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md hover:ring-1 hover:ring-ring/20"
+      className={cn(
+        "group bg-card text-card-foreground hover:ring-ring/20 relative flex flex-col overflow-hidden rounded-xl border shadow-sm transition-all hover:shadow-md hover:ring-1",
+        discarded && "opacity-75 grayscale",
+      )}
     >
-      <div className="flex aspect-[1.6/1] items-center justify-center bg-muted/30 p-6">
+      <div className="bg-muted/30 flex aspect-[1.6/1] items-center justify-center p-6">
         <img
           src={`${logo}`}
           alt={`${logo} Logo Card`}
           className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
       </div>
-      
+
       <button
         className={cn(
-          "absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm transition-all hover:scale-110",
-          favorite ? "text-red-500" : "text-muted-foreground hover:text-foreground"
+          "bg-background/80 absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110",
+          favorite
+            ? "text-red-500"
+            : "text-muted-foreground hover:text-foreground",
         )}
         onClick={(e) => {
           updateFavorite.mutate({

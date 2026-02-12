@@ -1,0 +1,1 @@
+ALTER TABLE "giftcards" ADD COLUMN "discarded" boolean DEFAULT false;

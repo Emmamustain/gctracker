@@ -9,6 +9,7 @@ import { GiftspacesModule } from './giftspaces/giftspaces.module';
 import { GiftcardsModule } from './giftcards/giftcards.module';
 import { BrandsModule } from './brands/brands.module';
 import { CategoriesModule } from './categories/categories.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CategoriesModule } from './categories/categories.module';
     GiftcardsModule,
     BrandsModule,
     CategoriesModule,
+    TransactionsModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],

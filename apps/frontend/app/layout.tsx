@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import QueryProvider from "@/providers/query-provider";
 import Header from "@/components/Header/Header";
 import { Toaster } from "@/components/ui/sonner";
+import { PWAInstallPrompt } from "@/components/PWAInstallPrompt/PWAInstallPrompt";
 
 const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken-grotesk",
@@ -29,48 +30,49 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export const metadata: Metadata = {
   title: {
-    default: "Dotfiles Market | Discover, Buy, and Sell Your Perfect Setup",
-    template: "%s | Dotfiles Market",
+    default: "GC Tracker | Effortless Gift Card Management",
+    template: "%s | GC Tracker",
   },
   description:
-    "The ultimate marketplace to discover, share, buy, and sell curated dotfiles. Elevate your development environment and OS customization.",
+    "The ultimate platform to track, manage, and organize your gift cards. Never lose value again with GC Tracker.",
   keywords: [
-    "dotfiles",
-    "configuration",
-    "customization",
-    "marketplace",
-    "ricing",
-    "Linux",
-    "macOS",
-    "Windows",
-    "Neovim",
-    "VSCode",
-    "shell",
-    "zsh",
-    "bash",
-    "terminal",
-    "themes",
-    "setups",
+    "gift card",
+    "tracker",
+    "management",
+    "balance",
+    "GC Tracker",
+    "giftcard",
+    "wallet",
+    "digital cards",
   ],
-  authors: [{ name: "The Dotfiles Market Team", url: siteUrl }],
-  creator: "Dotfiles Market",
+  authors: [{ name: "The GC Tracker Team", url: siteUrl }],
+  creator: "GC Tracker",
 
   openGraph: {
-    title: "Dotfiles Market | Discover, Buy, and Sell Your Perfect Setup",
+    title: "GC Tracker | Effortless Gift Card Management",
     description:
-      "The ultimate marketplace for curated OS and software configurations.",
+      "The ultimate platform to track, manage, and organize your gift cards.",
     url: siteUrl,
-    siteName: "Dotfiles Market",
+    siteName: "GC Tracker",
     images: [
       {
         url: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Dotfiles Market - A marketplace for OS and software configuration files.",
+        alt: "GC Tracker - Manage your gift cards in one place.",
       },
     ],
     locale: "en_US",
     type: "website",
+  },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "GC Tracker",
+  },
+  formatDetection: {
+    telephone: false,
   },
 };
 
@@ -92,6 +94,7 @@ export default function RootLayout({
         >
           <QueryProvider>
             <Toaster />
+            <PWAInstallPrompt />
             <div id="ui-portal"></div>
             {children}
           </QueryProvider>

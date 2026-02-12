@@ -8,7 +8,9 @@ import {
   categoriesRelations,
   giftcardsRelations,
   giftspacesRelations,
+  transactionsRelations,
 } from "./relations";
+import { transactions } from "./transactions";
 import { users } from "./users";
 
 export const schema = {
@@ -18,11 +20,13 @@ export const schema = {
   categories,
   giftcards,
   giftspaces,
+  transactions,
   usersRelations,
   brandsRelations,
   categoriesRelations,
   giftcardsRelations,
   giftspacesRelations,
+  transactionsRelations,
   giftspacesUsers,
   giftspacesGiftcards,
   brandsGiftcards,
@@ -36,11 +40,13 @@ export {
   categories,
   giftcards,
   giftspaces,
+  transactions,
   usersRelations,
   brandsRelations,
   categoriesRelations,
   giftcardsRelations,
   giftspacesRelations,
+  transactionsRelations,
   giftspacesUsers,
   giftspacesGiftcards,
   brandsGiftcards,
